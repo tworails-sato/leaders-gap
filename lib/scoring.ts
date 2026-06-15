@@ -186,6 +186,8 @@ export function summarizeLeadershipComparison(rows: ResponseRow[]) {
     executiveLabel,
     fieldLabel,
     hasEnoughData: executives.length > 0 && managers.length > 0,
+    executiveCount: executives.length,
+    fieldCount: managers.length,
     themes
   };
 }

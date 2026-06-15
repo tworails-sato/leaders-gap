@@ -32,12 +32,25 @@ export default async function ReportPage({ params }: { params: Promise<{ project
 
         <div className="panel">
           <h2>経営層と現場の認識差レーダーチャート</h2>
+          <div className="grid two">
+            <p><strong>経営側：</strong>{comparison.executiveCount}名回答済み</p>
+            <p>
+              <strong>現場側：</strong>{comparison.fieldCount}名回答済み
+              {project?.expected_leader_count ? `／想定${project.expected_leader_count}名` : ""}
+            </p>
+          </div>
           {comparison.hasEnoughData ? (
-            <RadarComparisonChart data={comparison.themes} executiveLabel={comparison.executiveLabel} fieldLabel={comparison.fieldLabel} />
+            <>
+              {project?.expected_leader_count && comparison.fieldCount < project.expected_leader_count ? (
+                <p className="muted">
+                  現在の回答状況をもとにした暫定集計です。回答者の追加により数値が更新されます。
+                </p>
+              ) : null}
+              <RadarComparisonChart data={comparison.themes} executiveLabel={comparison.executiveLabel} fieldLabel={comparison.fieldLabel} />
+            </>
           ) : (
             <p className="muted">
-              比較に必要な回答が揃っていません。<br />
-              経営層と現場側の双方の回答完了後に表示されます。
+              比較に必要な回答が不足しています。経営側と現場側それぞれ1名以上の回答が必要です。
             </p>
           )}
         </div>
