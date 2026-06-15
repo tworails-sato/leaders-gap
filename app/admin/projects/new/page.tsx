@@ -3,7 +3,11 @@ import { requireAdmin } from "@/lib/auth";
 
 export default async function NewProjectPage() {
   const { supabase } = await requireAdmin();
-  const { data: partners } = await supabase.from("partners").select("id, name").order("name");
+  const { data: partners } = await supabase
+    .from("partners")
+    .select("id, name, company_name, status")
+    .eq("status", "active")
+    .order("company_name");
 
   return (
     <main>
@@ -20,10 +24,10 @@ export default async function NewProjectPage() {
             <label>社長メール<input name="ceo_email" type="email" /></label>
             <label>想定部長回答人数<input name="expected_leader_count" type="number" min="0" /></label>
             <label>回答期限<input name="response_deadline" type="datetime-local" /></label>
-            <label>パートナー
+            <label>紹介・販売パートナー
               <select name="partner_id">
-                <option value="">未設定</option>
-                {(partners ?? []).map((partner) => <option key={partner.id} value={partner.id}>{partner.name}</option>)}
+                <option value="">自社直販・未設定</option>
+                {(partners ?? []).map((partner) => <option key={partner.id} value={partner.id}>{partner.company_name || partner.name}</option>)}
               </select>
             </label>
             <label>ステータス

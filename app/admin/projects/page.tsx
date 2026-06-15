@@ -7,7 +7,7 @@ export default async function ProjectsPage() {
   const { supabase } = await requireAdmin();
   const { data: projects } = await supabase
     .from("gap_projects")
-    .select("*, gap_invitations(*), gap_responses(*)")
+    .select("*, partners(id, company_name, name, status), gap_invitations(*), gap_responses(*)")
     .order("created_at", { ascending: false });
 
   return (
@@ -15,6 +15,7 @@ export default async function ProjectsPage() {
       <div className="topbar">
         <div className="brand">リーダーズGAP診断</div>
         <nav className="nav">
+          <Link className="button secondary" href="/admin/partners">パートナー管理</Link>
           <Link className="button" href="/admin/projects/new">案件作成</Link>
         </nav>
       </div>
@@ -24,7 +25,7 @@ export default async function ProjectsPage() {
           <table>
             <thead>
               <tr>
-                <th>作成日時</th><th>会社名</th><th>案件名</th><th>社長名</th><th>社長回答</th><th>部長回答数</th><th>最大GAPテーマ</th><th>ステータス</th><th>操作</th>
+                <th>作成日時</th><th>会社名</th><th>案件名</th><th>パートナー</th><th>社長名</th><th>社長回答</th><th>部長回答数</th><th>最大GAPテーマ</th><th>ステータス</th><th>操作</th>
               </tr>
             </thead>
             <tbody>
@@ -36,6 +37,7 @@ export default async function ProjectsPage() {
                     <td>{new Date(project.created_at).toLocaleDateString("ja-JP")}</td>
                     <td>{project.company_name}</td>
                     <td>{project.project_name}</td>
+                    <td>{project.partners?.company_name || project.partners?.name || "自社直販・未設定"}</td>
                     <td>{project.ceo_name}</td>
                     <td>{ceoDone ? "回答済み" : "未回答"}</td>
                     <td>{summary.responseCounts.managers}</td>

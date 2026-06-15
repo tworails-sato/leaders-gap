@@ -9,6 +9,7 @@ export type Question = {
 export type SmallTheme = {
   key: string;
   name: string;
+  description: string;
   parentKey: string;
   viewpoint: string[];
   gaps: string[];
@@ -32,6 +33,7 @@ export const smallThemes: SmallTheme[] = [
   {
     key: "strategy_alignment",
     name: "戦略の一致",
+    description: "何を目指し、なぜ取り組むのか、どのような状態を成功とみなすのかについて、経営側と実行側の認識が揃っているかを確認します。",
     parentKey: "strategy",
     viewpoint: ["何を目指すか", "なぜそれをやるか", "どういう状態を成功とみなすか"],
     gaps: ["方向性の解釈ズレ", "伝達のズレ", "危機感のズレ", "計画のズレ", "優先度のズレ"],
@@ -40,6 +42,7 @@ export const smallThemes: SmallTheme[] = [
   {
     key: "priority_alignment",
     name: "優先順位の一致",
+    description: "何を最優先し、何を後回しにするのか、また状況の変化に応じて優先順位をどう更新するのかについて確認します。",
     parentKey: "strategy",
     viewpoint: ["何を最優先するか", "何を後回しにするか", "状況変化時にどう更新するか"],
     gaps: ["方向性の解釈ズレ", "伝達のズレ", "危機感のズレ", "計画のズレ", "優先度のズレ"],
@@ -48,6 +51,7 @@ export const smallThemes: SmallTheme[] = [
   {
     key: "evaluation_alignment",
     name: "成果と評価の一致",
+    description: "何を成果として捉え、どの基準で評価し、その評価をどのように本人へ伝えるのかについて確認します。",
     parentKey: "evaluation_system",
     viewpoint: ["何を成果として見るか", "何を基準に評価するか", "その評価がどう伝えられるか"],
     gaps: ["業務と評価の整合性", "評価基準のズレ", "成果物の認識のズレ", "自己評価のズレ", "フィードバックのズレ"],
@@ -56,6 +60,7 @@ export const smallThemes: SmallTheme[] = [
   {
     key: "decision_authority_alignment",
     name: "決定権の所在の一致",
+    description: "誰が何を決めるのか、どの事項に承認が必要か、判断に迷った際に誰へ相談するのかが明確になっているかを確認します。",
     parentKey: "evaluation_system",
     viewpoint: ["誰が何を決めるか定義されているか", "承認基準が決まっているか", "判断範囲がルールとして明確か", "エスカレーション先が決まっているか"],
     gaps: ["責任範囲の理解のズレ", "制度理解のズレ", "評価基準のズレ"],
@@ -64,6 +69,7 @@ export const smallThemes: SmallTheme[] = [
   {
     key: "execution_design_alignment",
     name: "実務と設計の一致",
+    description: "戦略や方針が、現場で実行できる具体的な行動や、部門・担当者ごとの目標に落とし込まれているかを確認します。",
     parentKey: "tactics",
     viewpoint: ["戦略が実行可能な行動に落ちているか", "部門、担当レベルに翻訳されているか"],
     gaps: ["行動のズレ", "振り返りのズレ", "原因解釈のズレ", "仮説レベルのズレ", "再発防止思考のズレ"]
@@ -71,6 +77,7 @@ export const smallThemes: SmallTheme[] = [
   {
     key: "improvement_operation_alignment",
     name: "改善と運用の一致",
+    description: "課題や原因についての認識が揃い、振り返りから改善、次の行動への反映までが継続的に行われているかを確認します。",
     parentKey: "tactics",
     viewpoint: ["課題特定や原因把握が一致しているか", "振り返りや改善反映が回っているか"],
     gaps: ["行動のズレ", "振り返りのズレ", "原因解釈のズレ", "仮説レベルのズレ", "再発防止思考のズレ"]
@@ -78,6 +85,7 @@ export const smallThemes: SmallTheme[] = [
   {
     key: "decision_process_alignment",
     name: "意思決定プロセスの一致",
+    description: "必要な情報共有、判断までの流れ、意思決定の速さと分散が、組織内で適切に機能しているかを確認します。",
     parentKey: "organization",
     viewpoint: ["情報共有", "判断フロー", "判断スピードと分散がそれぞれ機能しているか"],
     gaps: ["情報の非対称性のズレ", "権限の不足のズレ", "可処分時間のズレ", "期待のズレ", "握りのズレ"]
@@ -85,6 +93,7 @@ export const smallThemes: SmallTheme[] = [
   {
     key: "delegation_execution",
     name: "権限移譲の実行",
+    description: "現場が実際に自ら判断できているか、不要な承認や介入が発生していないか、定めた権限が実務でも機能しているかを確認します。",
     parentKey: "organization",
     viewpoint: ["現場で実際に自分で判断できているか", "不要な承認が発生していないか", "ルール通りに運用されているか", "実務上、認識ズレが起きていないか"],
     gaps: ["情報の非対称性のズレ", "権限の不足のズレ", "可処分時間のズレ", "期待のズレ", "握りのズレ"]

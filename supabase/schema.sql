@@ -5,12 +5,18 @@ create table if not exists partners (
   name text not null,
   company_name text,
   contact_name text,
+  website text,
   email text,
+  notes text,
   status text default 'active',
   plan text,
   created_at timestamptz default now(),
   updated_at timestamptz default now()
 );
+
+alter table partners add column if not exists website text;
+alter table partners add column if not exists notes text;
+alter table partners alter column status set default 'active';
 
 create table if not exists admin_profiles (
   id uuid primary key references auth.users(id) on delete cascade,

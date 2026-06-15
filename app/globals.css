@@ -228,6 +228,30 @@ th {
   padding: 16px;
 }
 
+.theme-description {
+  background: #f2f6f5;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: #3f4a56;
+  font-size: 14px;
+  margin: 8px 0 14px;
+  padding: 10px 12px;
+}
+
+.radar-frame {
+  height: 430px;
+  min-width: 0;
+  width: 100%;
+}
+
+@media print {
+  .radar-frame {
+    break-inside: avoid;
+    height: 430px;
+    page-break-inside: avoid;
+  }
+}
+
 .scale {
   display: grid;
   gap: 8px;

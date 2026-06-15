@@ -153,3 +153,39 @@ export function summarizeResponses(rows: ResponseRow[]) {
     lowGaps: [...smallThemeScores].filter((item) => item.absoluteGap !== null).sort((a, b) => (a.absoluteGap ?? 0) - (b.absoluteGap ?? 0)).slice(0, 3)
   };
 }
+
+export function summarizeLeadershipComparison(rows: ResponseRow[]) {
+  const executives = rows.filter((row) => row.respondent_type === "ceo" || row.respondent_type === "executive");
+  const managers = rows.filter((row) => row.respondent_type === "manager");
+  const executiveLabel = executives.length === 1 && executives[0]?.respondent_type === "ceo" ? "社長" : "経営層平均";
+  const fieldLabel = "部長・事業責任者平均";
+
+  const themes = smallThemes.map((theme) => {
+    const executiveScores = executives
+      .map((row) => scoreFor(row, theme.key))
+      .filter((score): score is number => score !== null);
+    const fieldScores = managers
+      .map((row) => scoreFor(row, theme.key))
+      .filter((score): score is number => score !== null);
+    const executiveScore = round(average(executiveScores));
+    const fieldScore = round(average(fieldScores));
+    const gap = executiveScore !== null && fieldScore !== null ? round(executiveScore - fieldScore) : null;
+
+    return {
+      key: theme.key,
+      theme: theme.name,
+      executiveScore,
+      fieldScore,
+      gap,
+      absoluteGap: gap !== null ? round(Math.abs(gap)) : null,
+      judgment: judgeGap(gap !== null ? Math.abs(gap) : null)
+    };
+  });
+
+  return {
+    executiveLabel,
+    fieldLabel,
+    hasEnoughData: executives.length > 0 && managers.length > 0,
+    themes
+  };
+}

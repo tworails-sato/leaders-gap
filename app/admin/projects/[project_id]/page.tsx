@@ -7,7 +7,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
   const { project_id } = await params;
   const { supabase } = await requireAdmin();
   const [{ data: project }, { data: invitations }, { data: responses }] = await Promise.all([
-    supabase.from("gap_projects").select("*").eq("id", project_id).single(),
+    supabase.from("gap_projects").select("*, partners(id, company_name, name, status)").eq("id", project_id).single(),
     supabase.from("gap_invitations").select("*").eq("project_id", project_id).order("created_at"),
     supabase.from("gap_responses").select("*").eq("project_id", project_id).order("created_at")
   ]);
@@ -32,6 +32,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
           <div className="panel stat"><h2>{summary.responseCounts.ceo ? "回答済み" : "未回答"}</h2><p className="muted">社長回答状況</p></div>
           <div className="panel stat"><h2>{summary.responseCounts.managers}</h2><p className="muted">部長回答数</p></div>
           <div className="panel stat"><h2>{summary.topGaps[0]?.name ?? "-"}</h2><p className="muted">最大GAPテーマ</p></div>
+          <div className="panel stat"><h2>{project.partners?.company_name || project.partners?.name || "自社直販"}</h2><p className="muted">紹介・販売パートナー</p></div>
         </div>
 
         <div className="panel">

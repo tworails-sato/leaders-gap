@@ -210,6 +210,7 @@ export function ResponseForm({ invitation }: Props) {
       {smallThemes.map((theme) => (
         <section className="panel" key={theme.key}>
           <h2>{theme.name}</h2>
+          <p className="theme-description">{theme.description}</p>
           <p className="muted">未回答: {questions.filter((question) => question.smallThemeKey === theme.key && !answers[question.id]).length}問</p>
           {questions.filter((question) => question.smallThemeKey === theme.key).map((question) => (
             <div className={`question ${unansweredIds.includes(question.id) ? "unanswered" : ""}`} id={`question-${question.id}`} key={question.id}>
