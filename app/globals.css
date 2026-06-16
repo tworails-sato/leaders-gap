@@ -82,6 +82,36 @@ main {
   max-width: 980px;
 }
 
+.lp-hero-grid {
+  align-items: center;
+  display: grid;
+  gap: 32px;
+  grid-template-columns: minmax(0, 1.05fr) minmax(360px, 0.95fr);
+}
+
+.hero-chart {
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.hero-chart .radar-frame {
+  height: 360px;
+}
+
+.hero-chart-header {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: space-between;
+}
+
+.hero-chart-header p {
+  margin: 0;
+}
+
 .section-title {
   font-size: 28px;
   margin: 20px 0 0;
@@ -351,7 +381,8 @@ th {
 @media (max-width: 760px) {
   .grid.two,
   .grid.three,
-  .step-grid {
+  .step-grid,
+  .lp-hero-grid {
     grid-template-columns: 1fr;
   }
 
@@ -362,5 +393,9 @@ th {
 
   .scale {
     grid-template-columns: repeat(5, minmax(54px, 1fr));
+  }
+
+  .hero-chart .radar-frame {
+    height: 340px;
   }
 }

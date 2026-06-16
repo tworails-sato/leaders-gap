@@ -52,17 +52,26 @@ export default function SampleLandingPage() {
     <main>
       <section className="lp-hero">
         <div className="sample-ribbon">パートナー向け紹介ページ｜サンプルデータを含みます</div>
-        <div className="shell sample-offset">
-          <span className="badge">リーダーズGAP診断</span>
-          <h1>社長と部長の“認識差”を可視化し、権限移譲の論点を整理する</h1>
-          <p className="lead">
-            リーダーズGAP診断は、経営側と部長・事業責任者が同設問を各々の目線で回答し、
-            方針・優先順位・決定権・権限移譲などの認識差を可視化する診断です。
-          </p>
-          <p className="muted">組織開発、幹部の育成、管理職研修、伴走支援などの入口として活用いただけます。</p>
-          <div className="nav" style={{ marginTop: 24 }}>
-            <Link className="button" href="/sample/assessment">受検画面を確認する</Link>
-            <Link className="button secondary" href="/sample/report">フィードバックサンプルを見る</Link>
+        <div className="shell sample-offset lp-hero-grid">
+          <div>
+            <span className="badge">リーダーズGAP診断</span>
+            <h1>社長と部長の“認識差”を可視化し、権限移譲の論点を整理する</h1>
+            <p className="lead">
+              リーダーズGAP診断は、経営側と部長・事業責任者が同設問を各々の目線で回答し、
+              方針・優先順位・決定権・権限移譲などの認識差を可視化する診断です。
+            </p>
+            <p className="muted">組織開発、幹部の育成、管理職研修、伴走支援などの入口として活用いただけます。</p>
+            <div className="nav" style={{ marginTop: 24 }}>
+              <Link className="button" href="/sample/assessment">受検画面を確認する</Link>
+              <Link className="button secondary" href="/sample/report">フィードバックサンプルを見る</Link>
+            </div>
+          </div>
+          <div className="hero-chart">
+            <div className="hero-chart-header">
+              <span className="badge">Output Sample</span>
+              <p className="muted">経営側と現場側の8テーマ比較</p>
+            </div>
+            <RadarComparisonChart data={sampleReportThemes} executiveLabel="経営側" fieldLabel="現場側" />
           </div>
         </div>
       </section>
