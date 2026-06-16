@@ -67,6 +67,50 @@ main {
   min-height: 420px;
 }
 
+.lp-hero {
+  align-items: center;
+  background: linear-gradient(120deg, #eaf3f1, #ffffff 58%, #edf0f5);
+  display: grid;
+  min-height: 560px;
+}
+
+.lp-hero h1 {
+  font-size: clamp(34px, 5.4vw, 60px);
+  letter-spacing: 0;
+  line-height: 1.12;
+  margin: 12px 0 20px;
+  max-width: 980px;
+}
+
+.section-title {
+  font-size: 28px;
+  margin: 20px 0 0;
+}
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.step-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.step-card {
+  min-height: 150px;
+}
+
+.final-cta {
+  text-align: center;
+}
+
+.final-cta .nav {
+  justify-content: center;
+}
+
 .hero h1 {
   font-size: clamp(34px, 6vw, 64px);
   letter-spacing: 0;
@@ -306,7 +350,8 @@ th {
 
 @media (max-width: 760px) {
   .grid.two,
-  .grid.three {
+  .grid.three,
+  .step-grid {
     grid-template-columns: 1fr;
   }
 

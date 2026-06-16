@@ -158,6 +158,7 @@ export function ResponseForm({ invitation, mode = "production" }: Props) {
             <div className="nav">
               <button type="button" onClick={() => setStep("profile")}>サンプル受検を開始する</button>
               <Link className="button secondary" href="/sample/report">フィードバックサンプルを見る</Link>
+              <Link className="button secondary" href="/sample">紹介ページへ戻る</Link>
             </div>
           </>
         ) : (
@@ -239,6 +240,7 @@ export function ResponseForm({ invitation, mode = "production" }: Props) {
         <div className="nav">
           <button type="button" onClick={resetSample}>最初から確認する</button>
           <Link className="button secondary" href="/sample/report">フィードバックサンプルを見る</Link>
+          <Link className="button secondary" href="/sample">紹介ページへ戻る</Link>
         </div>
       </section>
     );

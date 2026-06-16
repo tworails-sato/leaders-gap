@@ -9,7 +9,8 @@ export default function SampleReportPage() {
       <div className="topbar sample-offset">
         <div className="brand">フィードバックサンプル</div>
         <nav className="nav">
-          <Link className="button secondary" href="/sample">受検サンプルを見る</Link>
+          <Link className="button secondary" href="/sample/assessment">受検サンプルを見る</Link>
+          <Link className="button secondary" href="/sample">紹介ページへ戻る</Link>
         </nav>
       </div>
 
