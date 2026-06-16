@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { questions, smallThemes } from "@/lib/questions";
 
@@ -154,7 +155,10 @@ export function ResponseForm({ invitation, mode = "production" }: Props) {
               これは説明用のサンプル画面です。入力内容や回答内容は保存されません。
               管理画面への反映、メール送信、結果集計は行われません。
             </p>
-            <button type="button" onClick={() => setStep("profile")}>サンプル受検を開始する</button>
+            <div className="nav">
+              <button type="button" onClick={() => setStep("profile")}>サンプル受検を開始する</button>
+              <Link className="button secondary" href="/sample/report">フィードバックサンプルを見る</Link>
+            </div>
           </>
         ) : (
           <>
@@ -232,7 +236,10 @@ export function ResponseForm({ invitation, mode = "production" }: Props) {
           経営側と現場側の認識差をテーマ別・設問別に集計します。
         </p>
         <p className="muted">このサンプルで入力・回答した内容は保存されていません。</p>
-        <button type="button" onClick={resetSample}>最初から確認する</button>
+        <div className="nav">
+          <button type="button" onClick={resetSample}>最初から確認する</button>
+          <Link className="button secondary" href="/sample/report">フィードバックサンプルを見る</Link>
+        </div>
       </section>
     );
   }
