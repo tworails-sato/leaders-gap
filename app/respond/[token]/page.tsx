@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { ResponseForm } from "@/components/ResponseForm";
 import { createAdminClient } from "@/lib/supabase";
+import { isDeadlineExpired } from "@/lib/deadlines";
 
 export default async function RespondPage({ params }: { params: Promise<{ token: string }> }) {
   const { token } = await params;
@@ -23,7 +24,7 @@ export default async function RespondPage({ params }: { params: Promise<{ token:
     redirect("/expired");
   }
 
-  if (invitation.expires_at && new Date(invitation.expires_at) < new Date()) {
+  if (isDeadlineExpired(invitation.expires_at)) {
     redirect("/expired");
   }
 

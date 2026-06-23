@@ -1,4 +1,5 @@
 import { appUrl } from "./app-url";
+import { formatDeadlineInTokyo, isDeadlineExpired } from "./deadlines";
 
 export type InvitationForAction = {
   id: string;
@@ -25,7 +26,7 @@ export function invitationUrl(token: string) {
 }
 
 export function isExpired(expiresAt?: string | null) {
-  return Boolean(expiresAt && new Date(expiresAt) < new Date());
+  return isDeadlineExpired(expiresAt);
 }
 
 export function canSendInvitation(invitation: InvitationForAction) {
@@ -37,5 +38,5 @@ export function canSendInvitation(invitation: InvitationForAction) {
 }
 
 export function formatDeadline(expiresAt?: string | null) {
-  return expiresAt ? new Date(expiresAt).toLocaleString("ja-JP") : "指定なし";
+  return formatDeadlineInTokyo(expiresAt);
 }

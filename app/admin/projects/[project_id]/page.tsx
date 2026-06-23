@@ -2,6 +2,7 @@ import Link from "next/link";
 import { InvitationActions } from "@/components/InvitationActions";
 import { requireAdmin } from "@/lib/auth";
 import { summarizeResponses } from "@/lib/scoring";
+import { defaultResponseDeadline, formatDeadlineInTokyo, isDeadlineExpired, toDateTimeLocalInTokyo } from "@/lib/deadlines";
 
 export default async function ProjectDetailPage({ params }: { params: Promise<{ project_id: string }> }) {
   const { project_id } = await params;
@@ -16,6 +17,11 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
   if (!project) {
     return <main className="shell"><h1>案件が見つかりません</h1></main>;
   }
+  const invitationDeadline = project.response_deadline && !isDeadlineExpired(project.response_deadline)
+    ? new Date(project.response_deadline)
+    : defaultResponseDeadline();
+  const invitationDeadlineInput = toDateTimeLocalInTokyo(invitationDeadline);
+  const minimumDeadline = toDateTimeLocalInTokyo(new Date());
 
   return (
     <main>
@@ -37,6 +43,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
 
         <div className="panel">
           <h2>招待URL作成</h2>
+          <p className="muted small-text">案件の回答期限: {formatDeadlineInTokyo(project.response_deadline)}。招待ごとに変更できます。</p>
           <form className="form" action="/api/invitations/create" method="post">
             <input type="hidden" name="project_id" value={project.id} />
             <div className="grid three">
@@ -49,6 +56,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
               </label>
               <label>氏名<input name="name" /></label>
               <label>メール<input name="email" type="email" /></label>
+              <label>回答期限（日本時間）<input name="response_deadline" type="datetime-local" defaultValue={invitationDeadlineInput} min={minimumDeadline} required /></label>
             </div>
             <button type="submit">招待URLを作成</button>
           </form>
@@ -57,7 +65,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         <div className="panel table-wrap">
           <h2>招待URL管理</h2>
           <table>
-            <thead><tr><th>区分</th><th>氏名</th><th>メール</th><th>状態</th><th>送信</th><th>操作</th></tr></thead>
+            <thead><tr><th>区分</th><th>氏名</th><th>メール</th><th>状態</th><th>期限</th><th>送信</th><th>操作</th></tr></thead>
             <tbody>
               {(invitations ?? []).map((invitation) => {
                 const hasResponse = (responses ?? []).some((response) => response.invitation_id === invitation.id);
@@ -67,6 +75,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                     <td>{invitation.name}</td>
                     <td>{invitation.email || <span className="muted">未登録</span>}</td>
                     <td>{invitation.revoked_at ? "無効化済み" : invitation.used_at ? "使用済み" : "未使用"}</td>
+                    <td>{formatDeadlineInTokyo(invitation.expires_at)}</td>
                     <td>{invitation.email_sent_at ? `${new Date(invitation.email_sent_at).toLocaleString("ja-JP")} / ${invitation.email_send_count ?? 0}回` : "未送信"}</td>
                     <td><InvitationActions invitation={invitation} hasResponse={hasResponse} /></td>
                   </tr>

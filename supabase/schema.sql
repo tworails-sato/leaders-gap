@@ -37,7 +37,7 @@ create table if not exists gap_projects (
   project_token text unique not null,
   status text default 'open',
   expected_leader_count integer,
-  response_deadline timestamptz,
+  response_deadline timestamptz default (now() + interval '7 days'),
   created_at timestamptz default now(),
   updated_at timestamptz default now()
 );
@@ -49,7 +49,7 @@ create table if not exists gap_invitations (
   name text,
   email text,
   token text unique not null,
-  expires_at timestamptz,
+  expires_at timestamptz default (now() + interval '7 days'),
   used_at timestamptz,
   revoked_at timestamptz,
   email_sent_at timestamptz,

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { questions } from "@/lib/questions";
 import { scoreAnswers } from "@/lib/scoring";
 import { createAdminClient } from "@/lib/supabase";
+import { isDeadlineExpired } from "@/lib/deadlines";
 
 export async function POST(request: Request) {
   const payload = await request.json();
@@ -16,7 +17,7 @@ export async function POST(request: Request) {
 
   if (!invitation) return NextResponse.json({ error: "不正なURLです。" }, { status: 404 });
   if (invitation.used_at) return NextResponse.json({ error: "このURLは回答済みです。" }, { status: 409 });
-  if (invitation.expires_at && new Date(invitation.expires_at) < new Date()) {
+  if (isDeadlineExpired(invitation.expires_at)) {
     return NextResponse.json({ error: "回答期限が過ぎています。" }, { status: 410 });
   }
 
