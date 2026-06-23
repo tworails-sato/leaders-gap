@@ -248,6 +248,14 @@ button.danger {
   font-weight: 700;
 }
 
+.text-link {
+  color: var(--accent-strong);
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 .sample-ribbon {
   background: #174f4a;
   border-radius: 0 0 8px 8px;

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { createClientBrowser } from "@/lib/supabase-browser";
 
@@ -19,7 +20,7 @@ export function LoginForm() {
     setLoading(false);
 
     if (signInError) {
-      setError(signInError.message);
+      setError("メールアドレスまたはパスワードが正しくありません。");
       return;
     }
 
@@ -36,7 +37,8 @@ export function LoginForm() {
         パスワード
         <input autoComplete="current-password" required type="password" value={password} onChange={(event) => setPassword(event.target.value)} />
       </label>
-      {error ? <p className="muted">{error}</p> : null}
+      <Link className="text-link" href="/forgot-password">パスワードを忘れた方</Link>
+      {error ? <p className="field-error">{error}</p> : null}
       <button type="submit" disabled={loading}>{loading ? "ログイン中" : "ログイン"}</button>
     </form>
   );
