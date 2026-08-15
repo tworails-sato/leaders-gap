@@ -102,7 +102,10 @@ export default function SampleLandingPage() {
     <main className="lgap-lp">
       <header className="lgap-header">
         <div className="lgap-wrap lgap-hd">
-          <div className="lgap-logo">Leaders<span>GAP</span></div>
+          <div className="lgap-logo">
+            <img src="/lgap-mark.png" alt="" aria-hidden="true" />
+            <span className="lgap-logo-text">Leaders<span>GAP</span></span>
+          </div>
           <a href="#contact" className="lgap-header-cta">無料相談</a>
         </div>
       </header>

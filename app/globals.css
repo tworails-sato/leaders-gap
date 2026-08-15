@@ -494,13 +494,24 @@ th {
 }
 
 .lgap-logo {
+  align-items: center;
   color: var(--lgap-navy);
+  display: inline-flex;
   font-size: 1.22rem;
   font-weight: 800;
+  gap: 10px;
   letter-spacing: 0.02em;
+  line-height: 1;
 }
 
-.lgap-logo span {
+.lgap-logo img {
+  display: block;
+  height: 38px;
+  object-fit: contain;
+  width: 46px;
+}
+
+.lgap-logo-text span {
   color: var(--lgap-blue-dk);
 }
 
