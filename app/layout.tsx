@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
+import { createPageMetadata, siteUrl } from "@/lib/site-metadata";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "リーダーズGAP診断",
-  description: "経営層と事業責任者の認識差を可視化し、権限移譲の論点を整理する診断です。"
+  metadataBase: new URL(siteUrl),
+  ...createPageMetadata()
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

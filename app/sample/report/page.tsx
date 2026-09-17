@@ -1,6 +1,14 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { RadarComparisonChart } from "@/components/RadarComparisonChart";
 import { sampleFeedback, sampleLowGaps, sampleReportCompany, sampleReportThemes, sampleTopGaps } from "@/lib/sample-report";
+import { createPageMetadata } from "@/lib/site-metadata";
+
+export const metadata: Metadata = createPageMetadata({
+  title: "フィードバックサンプル｜Leaders GAP",
+  path: "/sample/report",
+  description: "リーダーズGAP診断で確認できる分析結果とフィードバック内容のサンプルです。"
+});
 
 export default function SampleReportPage() {
   return (

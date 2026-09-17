@@ -1,4 +1,12 @@
+import type { Metadata } from "next";
 import { ResponseForm } from "@/components/ResponseForm";
+import { createPageMetadata } from "@/lib/site-metadata";
+
+export const metadata: Metadata = createPageMetadata({
+  title: "デモ診断を体験｜Leaders GAP",
+  path: "/sample/assessment",
+  description: "リーダーズGAP診断の全48問を、保存なしで体験できるパートナー向けデモ診断です。"
+});
 
 export default function SampleAssessmentPage() {
   return (

@@ -1,8 +1,15 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import type React from "react";
 import { ContactForm } from "@/components/ContactForm";
 import { RadarComparisonChart } from "@/components/RadarComparisonChart";
 import { sampleReportThemes } from "@/lib/sample-report";
+import { createPageMetadata } from "@/lib/site-metadata";
+
+export const metadata: Metadata = createPageMetadata({
+  title: "Leaders GAP｜経営と現場の“見えないGAP”を可視化する組織アセスメント｜デモ診断",
+  path: "/sample"
+});
 
 const demoAssessmentUrl = "https://gap.ceo-sherpa.com/sample/assessment";
 
