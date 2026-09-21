@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ResponseForm } from "@/components/ResponseForm";
+import { SampleAssessmentFlow } from "@/components/SampleAssessmentFlow";
 import { createPageMetadata } from "@/lib/site-metadata";
 
 export const metadata: Metadata = createPageMetadata({
@@ -16,7 +16,7 @@ export default function SampleAssessmentPage() {
         <h1>リーダーズGAP診断 受検サンプル</h1>
         <p className="muted">パートナーが顧客提案前に受検体験を確認するためのサンプルページです。</p>
       </div>
-      <ResponseForm mode="sample" />
+      <SampleAssessmentFlow />
     </main>
   );
 }
