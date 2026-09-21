@@ -10,7 +10,6 @@ import { sampleFeedback } from "@/lib/sample-report";
 
 type Profile = {
   name: string;
-  email: string;
   employment_type: string;
   department: string;
   tenure: string;
@@ -29,7 +28,6 @@ type Step = "guide" | "profiles" | "questions" | "handoff" | "sampleDone" | "rep
 
 const emptyProfile = (): Profile => ({
   name: "",
-  email: "",
   employment_type: "",
   department: "",
   tenure: "",
@@ -59,7 +57,7 @@ export function SampleAssessmentFlow() {
 
   const activeParticipant = participants.find((participant) => participant.id === activeId) ?? participants[0];
   const completedCount = participants.filter((participant) => participant.completed).length;
-  const allProfilesComplete = participants.every((participant) => participant.profileComplete);
+  const registeredCount = participants.filter((participant) => participant.profileComplete).length;
 
   function updateActiveParticipant(update: (participant: Participant) => Participant) {
     setParticipants((current) => current.map((participant) => participant.id === activeId ? update(participant) : participant));
@@ -105,10 +103,6 @@ export function SampleAssessmentFlow() {
     const profile = activeParticipant.profile;
     const nextErrors: Record<string, string> = {};
     if (!profile.name.trim()) nextErrors.name = "氏名を入力してください";
-    if (!profile.email.trim()) nextErrors.email = "メールアドレスを入力してください";
-    else if (!/^\S+@\S+\.\S+$/.test(profile.email)) nextErrors.email = "正しいメールアドレスを入力してください";
-    if (!profile.employment_type) nextErrors.employment_type = "雇用形態を選択してください";
-    if (!profile.tenure) nextErrors.tenure = "入社年数を選択してください";
     setProfileErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) return;
 
@@ -117,7 +111,6 @@ export function SampleAssessmentFlow() {
       profile: {
         ...participant.profile,
         name: participant.profile.name.trim(),
-        email: participant.profile.email.trim(),
         department: participant.profile.department.trim(),
         position: participant.profile.position.trim()
       },
@@ -127,12 +120,14 @@ export function SampleAssessmentFlow() {
   }
 
   function beginQuestions() {
-    if (!allProfilesComplete) {
-      setError("すべての回答者情報を登録してください。");
+    const registeredParticipants = participants.filter((participant) => participant.profileComplete);
+    if (registeredParticipants.length === 0) {
+      setError("氏名を入力し、回答者を登録してください。");
       return;
     }
-    const firstIncomplete = participants.find((participant) => !participant.completed);
+    const firstIncomplete = registeredParticipants.find((participant) => !participant.completed);
     if (!firstIncomplete) return;
+    setParticipants(registeredParticipants);
     setActiveId(firstIncomplete.id);
     setStep("questions");
     setError("");
@@ -218,31 +213,37 @@ export function SampleAssessmentFlow() {
     return (
       <section className="sample-offset">
         <SampleRibbon />
-        <div className="panel narrow">
-          <span className="badge">回答者情報</span>
-          <h2>回答者を登録してください</h2>
-          <p className="muted">2名の差を確認する場合は「回答者を追加する」から2人目を登録してください。デモでは最大2名まで利用できます。</p>
+        <div className="panel narrow sample-profile-card">
+          <div className="sample-profile-heading">
+            <div>
+              <span className="badge">STEP 1｜回答者情報</span>
+              <h2>回答者を登録してください</h2>
+              <p className="muted">氏名だけで登録できます。詳しい情報は任意で入力してください。</p>
+            </div>
+            <div className="sample-profile-count"><strong>{registeredCount}</strong><span>名登録済み</span></div>
+          </div>
+          <div className="sample-profile-guide">
+            <span><strong>1名で体験</strong> 個人の回答傾向を確認</span>
+            <span><strong>2名で体験</strong> 2人の認識差を比較</span>
+          </div>
           <ParticipantTabs participants={participants} activeId={activeId} onSelect={selectParticipant} />
-          <form className="form" onSubmit={saveProfile} noValidate>
+          <form className="form sample-profile-form" onSubmit={saveProfile} noValidate>
             <div className="grid two">
-              <ProfileField label="氏名" error={profileErrors.name}>
+              <ProfileField label="氏名" error={profileErrors.name} required>
                 <input value={activeParticipant.profile.name} onChange={(event) => updateProfile("name", event.target.value)} required />
               </ProfileField>
-              <ProfileField label="メールアドレス" error={profileErrors.email}>
-                <input type="email" value={activeParticipant.profile.email} onChange={(event) => updateProfile("email", event.target.value)} required />
-              </ProfileField>
-              <ProfileField label="雇用形態" error={profileErrors.employment_type}>
-                <select value={activeParticipant.profile.employment_type} onChange={(event) => updateProfile("employment_type", event.target.value)} required>
-                  <option value="">選択してください</option>
+              <ProfileField label="雇用形態">
+                <select value={activeParticipant.profile.employment_type} onChange={(event) => updateProfile("employment_type", event.target.value)}>
+                  <option value="">選択してください（任意）</option>
                   {employmentTypes.map((item) => <option key={item} value={item}>{item}</option>)}
                 </select>
               </ProfileField>
               <ProfileField label="所属">
                 <input value={activeParticipant.profile.department} onChange={(event) => updateProfile("department", event.target.value)} />
               </ProfileField>
-              <ProfileField label="入社年数" error={profileErrors.tenure}>
-                <select value={activeParticipant.profile.tenure} onChange={(event) => updateProfile("tenure", event.target.value)} required>
-                  <option value="">選択してください</option>
+              <ProfileField label="入社年数">
+                <select value={activeParticipant.profile.tenure} onChange={(event) => updateProfile("tenure", event.target.value)}>
+                  <option value="">選択してください（任意）</option>
                   {tenureOptions.map((item) => <option key={item} value={item}>{item}</option>)}
                 </select>
               </ProfileField>
@@ -250,15 +251,19 @@ export function SampleAssessmentFlow() {
                 <input value={activeParticipant.profile.position} onChange={(event) => updateProfile("position", event.target.value)} />
               </ProfileField>
             </div>
-            <div className="nav">
-              <button type="submit">{activeParticipant.profileComplete ? "回答者情報を更新する" : "この回答者を登録する"}</button>
+            <div className="nav sample-profile-actions">
+              <button className="sample-register-button" type="submit">{activeParticipant.profileComplete ? "回答者情報を更新する" : "この回答者を登録する"}</button>
               <button className="secondary" type="button" onClick={addParticipant}>回答者を追加する</button>
             </div>
           </form>
           {error ? <p className="inline-error" role="alert">{error}</p> : null}
           <div className="sample-profile-footer">
             <button className="secondary" type="button" onClick={() => setStep("guide")}>戻る</button>
-            <button type="button" onClick={beginQuestions} disabled={!allProfilesComplete}>アセスメントへ進む</button>
+            {registeredCount > 0 ? (
+              <button className="sample-start-assessment" type="button" onClick={beginQuestions}>登録済み{registeredCount}名でアセスメントへ進む</button>
+            ) : (
+              <p className="sample-registration-hint">氏名を入力して「この回答者を登録する」を押してください。</p>
+            )}
           </div>
         </div>
       </section>
@@ -390,8 +395,14 @@ function SampleRibbon() {
   return <div className="sample-ribbon">サンプル画面｜回答内容は保存されません</div>;
 }
 
-function ProfileField({ label, error, children }: { label: string; error?: string; children: React.ReactNode }) {
-  return <label>{label}{children}{error ? <span className="field-error">{error}</span> : null}</label>;
+function ProfileField({ label, error, children, required = false }: { label: string; error?: string; children: React.ReactNode; required?: boolean }) {
+  return (
+    <label>
+      <span className="sample-profile-label"><span>{label}</span><em className={required ? "required" : "optional"}>{required ? "必須" : "任意"}</em></span>
+      {children}
+      {error ? <span className="field-error">{error}</span> : null}
+    </label>
+  );
 }
 
 function ParticipantTabs({ participants, activeId, onSelect, compact = false }: { participants: Participant[]; activeId: number; onSelect: (id: number) => void; compact?: boolean }) {
