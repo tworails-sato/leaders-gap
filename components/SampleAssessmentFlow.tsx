@@ -10,6 +10,7 @@ import { sampleFeedback } from "@/lib/sample-report";
 
 type Profile = {
   name: string;
+  email: string;
   employment_type: string;
   department: string;
   tenure: string;
@@ -28,6 +29,7 @@ type Step = "guide" | "profiles" | "questions" | "handoff" | "sampleDone" | "rep
 
 const emptyProfile = (): Profile => ({
   name: "",
+  email: "",
   employment_type: "",
   department: "",
   tenure: "",
@@ -54,6 +56,7 @@ export function SampleAssessmentFlow() {
   const [unansweredIds, setUnansweredIds] = useState<number[]>([]);
   const [error, setError] = useState("");
   const [handoffTargetId, setHandoffTargetId] = useState<number | null>(null);
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
 
   const activeParticipant = participants.find((participant) => participant.id === activeId) ?? participants[0];
   const completedCount = participants.filter((participant) => participant.completed).length;
@@ -103,6 +106,8 @@ export function SampleAssessmentFlow() {
     const profile = activeParticipant.profile;
     const nextErrors: Record<string, string> = {};
     if (!profile.name.trim()) nextErrors.name = "氏名を入力してください";
+    if (!profile.email.trim()) nextErrors.email = "メールアドレスを入力してください";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(profile.email.trim())) nextErrors.email = "正しい形式のメールアドレスを入力してください";
     setProfileErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) return;
 
@@ -111,6 +116,7 @@ export function SampleAssessmentFlow() {
       profile: {
         ...participant.profile,
         name: participant.profile.name.trim(),
+        email: participant.profile.email.trim().toLowerCase(),
         department: participant.profile.department.trim(),
         position: participant.profile.position.trim()
       },
@@ -186,7 +192,17 @@ export function SampleAssessmentFlow() {
     setUnansweredIds([]);
     setError("");
     setHandoffTargetId(null);
+    setAgreedToTerms(false);
     window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function startSample() {
+    if (!agreedToTerms) {
+      setError("利用条件への同意が必要です。");
+      return;
+    }
+    setError("");
+    setStep("profiles");
   }
 
   if (step === "guide") {
@@ -200,8 +216,32 @@ export function SampleAssessmentFlow() {
           2名で受検する場合は、同じ端末を順番に使って回答し、完了後に8テーマごとの回答差を確認できます。
           入力内容や回答内容はブラウザ内の一時状態だけで扱い、保存・メール送信・管理画面への反映は行いません。
         </p>
+        <div className="sample-terms-box">
+          <h3>ご利用条件</h3>
+          <ul>
+            <li>設問や回答内容のコピー、複製、別サービスへの転用を禁止します。</li>
+            <li>当社の許可なく、営業活動や広報活動へ利用することを禁止します。</li>
+            <li>
+              本診断の著作権は
+              <a href="https://www.t-rails.com/" target="_blank" rel="noreferrer">合同会社Two rails</a>
+              に帰属します。
+            </li>
+          </ul>
+          <label className="sample-terms-consent">
+            <input
+              checked={agreedToTerms}
+              onChange={(event) => {
+                setAgreedToTerms(event.target.checked);
+                if (event.target.checked) setError("");
+              }}
+              type="checkbox"
+            />
+            <span>上記の利用条件に同意してサンプル診断を開始します</span>
+          </label>
+        </div>
+        {error ? <p className="inline-error" role="alert">{error}</p> : null}
         <div className="nav">
-          <button type="button" onClick={() => setStep("profiles")}>サンプル受検を開始する</button>
+          <button type="button" onClick={startSample}>サンプル受検を開始する</button>
           <Link className="button secondary" href="/sample/report">固定のフィードバックサンプルを見る</Link>
           <Link className="button secondary" href="/sample">紹介ページへ戻る</Link>
         </div>
@@ -218,7 +258,7 @@ export function SampleAssessmentFlow() {
             <div>
               <span className="badge">STEP 1｜回答者情報</span>
               <h2>回答者を登録してください</h2>
-              <p className="muted">氏名だけで登録できます。詳しい情報は任意で入力してください。</p>
+              <p className="muted">氏名とメールアドレスを入力してください。その他の情報は任意です。</p>
             </div>
             <div className="sample-profile-count"><strong>{registeredCount}</strong><span>名登録済み</span></div>
           </div>
@@ -231,6 +271,9 @@ export function SampleAssessmentFlow() {
             <div className="grid two">
               <ProfileField label="氏名" error={profileErrors.name} required>
                 <input value={activeParticipant.profile.name} onChange={(event) => updateProfile("name", event.target.value)} required />
+              </ProfileField>
+              <ProfileField label="メールアドレス" error={profileErrors.email} required>
+                <input inputMode="email" type="email" value={activeParticipant.profile.email} onChange={(event) => updateProfile("email", event.target.value)} required />
               </ProfileField>
               <ProfileField label="雇用形態">
                 <select value={activeParticipant.profile.employment_type} onChange={(event) => updateProfile("employment_type", event.target.value)}>
@@ -262,7 +305,7 @@ export function SampleAssessmentFlow() {
             {registeredCount > 0 ? (
               <button className="sample-start-assessment" type="button" onClick={beginQuestions}>登録済み{registeredCount}名でアセスメントへ進む</button>
             ) : (
-              <p className="sample-registration-hint">氏名を入力して「この回答者を登録する」を押してください。</p>
+              <p className="sample-registration-hint">氏名とメールアドレスを入力して「この回答者を登録する」を押してください。</p>
             )}
           </div>
         </div>

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { MessageCircleMore, Route, Waypoints } from "lucide-react";
 import type { Metadata } from "next";
 import type React from "react";
 import { ContactForm } from "@/components/ContactForm";
@@ -119,21 +120,40 @@ export default function SampleLandingPage() {
 
       <section className="lgap-hero">
         <div className="lgap-wrap">
-          <div className="lgap-tag">組織の成長痛に向き合う経営層・人事の方へ</div>
-          <div className="lgap-eyebrow lgap-eyebrow-left">Leaders GAP</div>
-          <h1>経営と現場の<span>“見えないGAP”</span>を、<br />可視化する。</h1>
-          <p>
-            組織が一定の規模を超えたあたりから、経営の方針と現場の実感にズレが生じはじめます。
-            1on1や研修では届かない「認識のズレ」を、設問とインタビューで可視化し、打ち手の優先順位を整理する組織サポートプログラムです。
-          </p>
-          <a href={demoAssessmentUrl} className="lgap-btn-primary">まずはデモ診断を試す</a>
-          <div className="lgap-sub">※ ご担当者お一人でも受検いただけます</div>
+          <div className="lgap-hero-main">
+            <div className="lgap-tag">社長のための権限移譲プログラム｜リーダーズGAP</div>
+            <h1>社長が任せて、<br className="lgap-mobile-break" />幹部が動く会社へ</h1>
+            <p className="lgap-hero-copy">
+              リーダーズGAPは、社長・幹部・現場の三方向から「任せたつもり」と「任されたつもり」のズレを測り、任せる範囲と進め方を整える権限移譲プログラムです。
+            </p>
+          </div>
+
+          <div className="lgap-hero-points">
+            <div className="lgap-hero-point">
+              <Waypoints aria-hidden="true" />
+              <span>研修のような一方向ではなく、<strong>三方向で測る</strong></span>
+            </div>
+            <div className="lgap-hero-point">
+              <MessageCircleMore aria-hidden="true" />
+              <span>評価に関わらない第三者だから、<strong>本音が出る</strong></span>
+            </div>
+            <div className="lgap-hero-point">
+              <Route aria-hidden="true" />
+              <span>明日から使える<strong>「任せ方の型」</strong>を渡す</span>
+            </div>
+          </div>
+
+          <div className="lgap-hero-actions">
+            <a href={demoAssessmentUrl} className="lgap-btn-primary">デモ診断を試す（無料・約5分）</a>
+            <a href="#contact" className="lgap-btn-secondary">権限移譲について相談する</a>
+          </div>
+          <div className="lgap-sub">※ 社長お一人でも受検できます</div>
         </div>
       </section>
 
       <section className="lgap-sec">
         <div className="lgap-wrap">
-          <SectionHead eyebrow="Issue" title={<>組織が大きくなるほど、<br />なぜ「忖度」が生まれるのか</>} lead="制度や施策が足りないのではありません。組織が一定の規模に育つほど、構造的に「本音が届かない・徹底しきれない」状態が生まれます。" />
+          <SectionHead eyebrow="Issue" title={<>任せたのに、思っていた形で上がってこない。<br />そんなことが続いていませんか。</>} lead="制度や施策が足りないのではありません。組織が一定の規模に育つほど、構造的に「本音が届かない・徹底しきれない」状態が生まれます。" />
           <div className="lgap-issue-grid">
             {issues.map((issue, index) => (
               <article className="lgap-issue-card" key={issue.title}>
