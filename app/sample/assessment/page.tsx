@@ -14,7 +14,6 @@ export default function SampleAssessmentPage() {
       <div className="narrow">
         <span className="badge">Partner Sample</span>
         <h1>リーダーズGAP診断 受検サンプル</h1>
-        <p className="muted">パートナーが顧客提案前に受検体験を確認するためのサンプルページです。</p>
       </div>
       <SampleAssessmentFlow />
     </main>

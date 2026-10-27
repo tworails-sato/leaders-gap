@@ -1,58 +1,35 @@
 "use client";
 
 import Link from "next/link";
-import { CheckCircle2, ChevronRight, Clock3, Users } from "lucide-react";
+import { ArrowRight, BarChart3, CheckCircle2, ChevronRight, Clock3, ShieldCheck, UserRound, Users, UsersRound } from "lucide-react";
 import { useMemo, useState } from "react";
 import { RadarComparisonChart } from "@/components/RadarComparisonChart";
 import { questions, smallThemes } from "@/lib/questions";
 import { judgeGap, round, scoreAnswers } from "@/lib/scoring";
 import { sampleFeedback } from "@/lib/sample-report";
 
-type Profile = {
-  name: string;
-  email: string;
-  employment_type: string;
-  department: string;
-  tenure: string;
-  position: string;
-};
-
 type Participant = {
   id: number;
-  profile: Profile;
-  profileComplete: boolean;
   answers: Record<number, number>;
   completed: boolean;
 };
 
-type Step = "guide" | "profiles" | "questions" | "handoff" | "sampleDone" | "report";
-
-const emptyProfile = (): Profile => ({
-  name: "",
-  email: "",
-  employment_type: "",
-  department: "",
-  tenure: "",
-  position: ""
-});
+type Step = "guide" | "questions" | "handoff" | "report";
 
 const createParticipant = (id: number): Participant => ({
   id,
-  profile: emptyProfile(),
-  profileComplete: false,
   answers: {},
   completed: false
 });
 
-const employmentTypes = ["正社員", "アルバイト", "契約社員", "業務委託", "インターン", "その他"];
-const tenureOptions = ["1年以内", "1～4年", "5～10年", "10年以上"];
 const scoreLabels: Record<number, string> = { 1: "あてはまらない", 2: "", 3: "", 4: "", 5: "あてはまる" };
+const privacyPolicyUrl = process.env.NEXT_PUBLIC_PRIVACY_POLICY_URL || "https://www.t-rails.com/";
 
 export function SampleAssessmentFlow() {
   const [step, setStep] = useState<Step>("guide");
+  const [participantCount, setParticipantCount] = useState<1 | 2>(1);
   const [participants, setParticipants] = useState<Participant[]>([createParticipant(1)]);
   const [activeId, setActiveId] = useState(1);
-  const [profileErrors, setProfileErrors] = useState<Record<string, string>>({});
   const [unansweredIds, setUnansweredIds] = useState<number[]>([]);
   const [error, setError] = useState("");
   const [handoffTargetId, setHandoffTargetId] = useState<number | null>(null);
@@ -60,7 +37,6 @@ export function SampleAssessmentFlow() {
 
   const activeParticipant = participants.find((participant) => participant.id === activeId) ?? participants[0];
   const completedCount = participants.filter((participant) => participant.completed).length;
-  const registeredCount = participants.filter((participant) => participant.profileComplete).length;
 
   function updateActiveParticipant(update: (participant: Participant) => Participant) {
     setParticipants((current) => current.map((participant) => participant.id === activeId ? update(participant) : participant));
@@ -70,72 +46,7 @@ export function SampleAssessmentFlow() {
     const participant = participants.find((item) => item.id === id);
     if (!participant) return;
     setActiveId(id);
-    setProfileErrors({});
     setUnansweredIds([]);
-    setError("");
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }
-
-  function addParticipant() {
-    if (participants.length >= 2) {
-      setError("デモでは3名以上のご利用はできません。");
-      return;
-    }
-    const nextId = 2;
-    setParticipants((current) => [...current, createParticipant(nextId)]);
-    setActiveId(nextId);
-    setProfileErrors({});
-    setError("");
-  }
-
-  function updateProfile(field: keyof Profile, value: string) {
-    updateActiveParticipant((participant) => ({
-      ...participant,
-      profile: { ...participant.profile, [field]: value },
-      profileComplete: false
-    }));
-    setProfileErrors((current) => {
-      const next = { ...current };
-      delete next[field];
-      return next;
-    });
-  }
-
-  function saveProfile(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const profile = activeParticipant.profile;
-    const nextErrors: Record<string, string> = {};
-    if (!profile.name.trim()) nextErrors.name = "氏名を入力してください";
-    if (!profile.email.trim()) nextErrors.email = "メールアドレスを入力してください";
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(profile.email.trim())) nextErrors.email = "正しい形式のメールアドレスを入力してください";
-    setProfileErrors(nextErrors);
-    if (Object.keys(nextErrors).length > 0) return;
-
-    updateActiveParticipant((participant) => ({
-      ...participant,
-      profile: {
-        ...participant.profile,
-        name: participant.profile.name.trim(),
-        email: participant.profile.email.trim().toLowerCase(),
-        department: participant.profile.department.trim(),
-        position: participant.profile.position.trim()
-      },
-      profileComplete: true
-    }));
-    setError("");
-  }
-
-  function beginQuestions() {
-    const registeredParticipants = participants.filter((participant) => participant.profileComplete);
-    if (registeredParticipants.length === 0) {
-      setError("氏名を入力し、回答者を登録してください。");
-      return;
-    }
-    const firstIncomplete = registeredParticipants.find((participant) => !participant.completed);
-    if (!firstIncomplete) return;
-    setParticipants(registeredParticipants);
-    setActiveId(firstIncomplete.id);
-    setStep("questions");
     setError("");
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
@@ -168,10 +79,9 @@ export function SampleAssessmentFlow() {
     if (nextParticipant) {
       setHandoffTargetId(nextParticipant.id);
       setStep("handoff");
-    } else if (updated.length === 2) {
-      setStep("report");
     } else {
-      setStep("sampleDone");
+      setStep("report");
+      void notifySampleCompletion(updated.length);
     }
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
@@ -186,9 +96,9 @@ export function SampleAssessmentFlow() {
 
   function resetSample() {
     setStep("guide");
+    setParticipantCount(1);
     setParticipants([createParticipant(1)]);
     setActiveId(1);
-    setProfileErrors({});
     setUnansweredIds([]);
     setError("");
     setHandoffTargetId(null);
@@ -202,112 +112,50 @@ export function SampleAssessmentFlow() {
       return;
     }
     setError("");
-    setStep("profiles");
+    const nextParticipants = Array.from({ length: participantCount }, (_, index) => createParticipant(index + 1));
+    setParticipants(nextParticipants);
+    setActiveId(1);
+    setStep("questions");
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   if (step === "guide") {
     return (
-      <section className="panel narrow sample-offset">
+      <section className="sample-guide sample-offset">
         <SampleRibbon />
-        <span className="badge">受検案内</span>
-        <h2>パートナー向け診断サンプル</h2>
-        <p className="muted">本番と同じ全48問を、1名または2名で体験できます。</p>
-        <p className="muted">
-          2名で受検する場合は、同じ端末を順番に使って回答し、完了後に8テーマごとの回答差を確認できます。
-          入力内容や回答内容はブラウザ内の一時状態だけで扱い、保存・メール送信・管理画面への反映は行いません。
-        </p>
-        <div className="sample-terms-box">
-          <h3>ご利用条件</h3>
-          <ul>
-            <li>設問や回答内容のコピー、複製、別サービスへの転用を禁止します。</li>
-            <li>当社の許可なく、営業活動や広報活動へ利用することを禁止します。</li>
-            <li>
-              本診断の著作権は
-              <a href="https://www.t-rails.com/" target="_blank" rel="noreferrer">合同会社Two rails</a>
-              に帰属します。
-            </li>
-          </ul>
-          <label className="sample-terms-consent">
-            <input
-              checked={agreedToTerms}
-              onChange={(event) => {
-                setAgreedToTerms(event.target.checked);
-                if (event.target.checked) setError("");
-              }}
-              type="checkbox"
-            />
-            <span>上記の利用条件に同意してサンプル診断を開始します</span>
-          </label>
-        </div>
-        {error ? <p className="inline-error" role="alert">{error}</p> : null}
-        <div className="nav">
-          <button type="button" onClick={startSample}>サンプル受検を開始する</button>
-          <Link className="button secondary" href="/sample/report">固定のフィードバックサンプルを見る</Link>
-          <Link className="button secondary" href="/sample">紹介ページへ戻る</Link>
-        </div>
-      </section>
-    );
-  }
-
-  if (step === "profiles") {
-    return (
-      <section className="sample-offset">
-        <SampleRibbon />
-        <div className="panel narrow sample-profile-card">
-          <div className="sample-profile-heading">
-            <div>
-              <span className="badge">STEP 1｜回答者情報</span>
-              <h2>回答者を登録してください</h2>
-              <p className="muted">氏名とメールアドレスを入力してください。その他の情報は任意です。</p>
-            </div>
-            <div className="sample-profile-count"><strong>{registeredCount}</strong><span>名登録済み</span></div>
+        <div className="sample-guide-copy">
+          <span className="sample-kicker">LEADERS GAP DEMO</span>
+          <h2>組織の認識差を、<br />まずは自分の回答から。</h2>
+          <p>全48問に回答すると、8つのテーマごとの傾向をその場で確認できます。2名で回答する場合は、同じ端末を順番に使って回答差を比較できます。</p>
+          <div className="sample-guide-features">
+            <span><CheckCircle2 size={18} />約5〜10分</span>
+            <span><BarChart3 size={18} />回答後すぐに可視化</span>
+            <span><ShieldCheck size={18} />入力・回答は保存されません</span>
           </div>
-          <div className="sample-profile-guide">
-            <span><strong>1名で体験</strong> 個人の回答傾向を確認</span>
-            <span><strong>2名で体験</strong> 2人の認識差を比較</span>
+        </div>
+        <div className="sample-start-card">
+          <span className="badge">受検人数</span>
+          <h3>何名で試しますか？</h3>
+          <p className="muted">1名でも診断結果を確認できます。</p>
+          <div className="sample-count-selector" role="radiogroup" aria-label="受検人数">
+            <button className={participantCount === 1 ? "active" : ""} onClick={() => setParticipantCount(1)} role="radio" aria-checked={participantCount === 1} type="button"><UserRound size={24} /><strong>1名で体験</strong><span>基準値と比較</span></button>
+            <button className={participantCount === 2 ? "active" : ""} onClick={() => setParticipantCount(2)} role="radio" aria-checked={participantCount === 2} type="button"><UsersRound size={24} /><strong>2名で体験</strong><span>回答差を比較</span></button>
           </div>
-          <ParticipantTabs participants={participants} activeId={activeId} onSelect={selectParticipant} />
-          <form className="form sample-profile-form" onSubmit={saveProfile} noValidate>
-            <div className="grid two">
-              <ProfileField label="氏名" error={profileErrors.name} required>
-                <input value={activeParticipant.profile.name} onChange={(event) => updateProfile("name", event.target.value)} required />
-              </ProfileField>
-              <ProfileField label="メールアドレス" error={profileErrors.email} required>
-                <input inputMode="email" type="email" value={activeParticipant.profile.email} onChange={(event) => updateProfile("email", event.target.value)} required />
-              </ProfileField>
-              <ProfileField label="雇用形態">
-                <select value={activeParticipant.profile.employment_type} onChange={(event) => updateProfile("employment_type", event.target.value)}>
-                  <option value="">選択してください（任意）</option>
-                  {employmentTypes.map((item) => <option key={item} value={item}>{item}</option>)}
-                </select>
-              </ProfileField>
-              <ProfileField label="所属">
-                <input value={activeParticipant.profile.department} onChange={(event) => updateProfile("department", event.target.value)} />
-              </ProfileField>
-              <ProfileField label="入社年数">
-                <select value={activeParticipant.profile.tenure} onChange={(event) => updateProfile("tenure", event.target.value)}>
-                  <option value="">選択してください（任意）</option>
-                  {tenureOptions.map((item) => <option key={item} value={item}>{item}</option>)}
-                </select>
-              </ProfileField>
-              <ProfileField label="役職">
-                <input value={activeParticipant.profile.position} onChange={(event) => updateProfile("position", event.target.value)} />
-              </ProfileField>
-            </div>
-            <div className="nav sample-profile-actions">
-              <button className="sample-register-button" type="submit">{activeParticipant.profileComplete ? "回答者情報を更新する" : "この回答者を登録する"}</button>
-              <button className="secondary" type="button" onClick={addParticipant}>回答者を追加する</button>
-            </div>
-          </form>
+          <div className="sample-terms-box">
+            <h3>ご利用条件</h3>
+            <ul>
+              <li>設問や回答内容のコピー、複製、別サービスへの転用を禁止します。</li>
+              <li>当社の許可なく、営業活動や広報活動へ利用することを禁止します。</li>
+              <li>本診断の著作権は<a href="https://www.t-rails.com/" target="_blank" rel="noreferrer">合同会社Two rails</a>に帰属します。</li>
+            </ul>
+            <label className="sample-terms-consent">
+              <input checked={agreedToTerms} onChange={(event) => { setAgreedToTerms(event.target.checked); if (event.target.checked) setError(""); }} type="checkbox" />
+              <span>利用条件と<a href={privacyPolicyUrl} target="_blank" rel="noreferrer">プライバシーポリシー</a>に同意する</span>
+            </label>
+          </div>
           {error ? <p className="inline-error" role="alert">{error}</p> : null}
-          <div className="sample-profile-footer">
-            <button className="secondary" type="button" onClick={() => setStep("guide")}>戻る</button>
-            {registeredCount > 0 ? (
-              <button className="sample-start-assessment" type="button" onClick={beginQuestions}>登録済み{registeredCount}名でアセスメントへ進む</button>
-            ) : (
-              <p className="sample-registration-hint">氏名とメールアドレスを入力して「この回答者を登録する」を押してください。</p>
-            )}
-          </div>
+          <button className="sample-primary-cta" type="button" onClick={startSample}>デモ診断を開始する<ArrowRight size={18} /></button>
+          <Link className="sample-text-link" href="/sample/report">先にフィードバックサンプルを見る</Link>
         </div>
       </section>
     );
@@ -319,29 +167,13 @@ export function SampleAssessmentFlow() {
       <section className="panel narrow sample-offset handoff-panel">
         <SampleRibbon />
         <span className="badge">回答完了</span>
-        <h2>{activeParticipant.profile.name}さんの回答が完了しました</h2>
+        <h2>回答者{activeParticipant.id}の回答が完了しました</h2>
         <p className="muted">回答内容はこの端末内だけに一時保持されています。次の回答者へ画面をお渡しください。</p>
         <div className="handoff-next">
           <span>次の回答者</span>
-          <strong>{nextParticipant?.profile.name || `回答者${handoffTargetId}`}</strong>
+          <strong>回答者{nextParticipant?.id || handoffTargetId}</strong>
         </div>
         <button type="button" onClick={continueAfterHandoff}>次の回答を開始する</button>
-      </section>
-    );
-  }
-
-  if (step === "sampleDone") {
-    return (
-      <section className="panel narrow sample-offset">
-        <SampleRibbon />
-        <h2>サンプル受検は以上です。</h2>
-        <p className="muted">1名での回答が完了しました。2名の比較を確認する場合は、最初からやり直して回答者を2名登録してください。</p>
-        <p className="muted">このサンプルで入力・回答した内容は保存されていません。</p>
-        <div className="nav">
-          <button type="button" onClick={resetSample}>最初から確認する</button>
-          <Link className="button secondary" href="/sample/report">固定のフィードバックサンプルを見る</Link>
-          <Link className="button secondary" href="/sample">紹介ページへ戻る</Link>
-        </div>
       </section>
     );
   }
@@ -357,7 +189,7 @@ export function SampleAssessmentFlow() {
     ? "回答内容を更新する"
     : participants.length === 2 && completedCount === 1
       ? "2名分を集計する"
-      : `${activeParticipant.profile.name}さんの回答を完了する`;
+      : "回答を完了して結果を見る";
 
   return (
     <form className="form sample-offset sample-assessment-form" onSubmit={submitAnswers} noValidate>
@@ -365,7 +197,7 @@ export function SampleAssessmentFlow() {
       <div className="assessment-intro">
         <div>
           <span className="badge">LEADERS GAP ASSESSMENT</span>
-          <h2>{activeParticipant.profile.name}さんのアセスメント</h2>
+          <h2>回答者{activeParticipant.id}のアセスメント</h2>
           <p>現在の状態に最も近いものを、直感的に1～5で選択してください。</p>
         </div>
         <div className="assessment-scale-guide" aria-label="回答基準">
@@ -377,7 +209,7 @@ export function SampleAssessmentFlow() {
 
       <div className="assessment-sticky-controls">
         <div className="assessment-control-heading">
-          <span><Users size={17} aria-hidden="true" />{participants.length > 1 ? "回答者を切り替える" : `${activeParticipant.profile.name}さんの進捗`}</span>
+          <span><Users size={17} aria-hidden="true" />{participants.length > 1 ? "回答者を切り替える" : "回答者1の進捗"}</span>
           <strong>{progress}%</strong>
         </div>
         {participants.length > 1 ? <ParticipantTabs participants={participants} activeId={activeId} onSelect={selectParticipant} compact /> : null}
@@ -426,7 +258,6 @@ export function SampleAssessmentFlow() {
           {error ? <p className="assessment-dock-error" role="alert">{error}</p> : <p><strong>{remainingCount === 0 ? "すべて回答済みです" : `残り${remainingCount}問です`}</strong><span>{remainingCount === 0 ? "回答内容を確認して完了してください。" : "未回答の設問を選択してください。"}</span></p>}
         </div>
         <div className="nav">
-          {completedCount === 0 ? <button className="secondary" type="button" onClick={() => setStep("profiles")}>回答者情報へ戻る</button> : null}
           <button type="submit">{submitLabel}<ChevronRight size={18} aria-hidden="true" /></button>
         </div>
       </div>
@@ -435,17 +266,7 @@ export function SampleAssessmentFlow() {
 }
 
 function SampleRibbon() {
-  return <div className="sample-ribbon">サンプル画面｜回答内容は保存されません</div>;
-}
-
-function ProfileField({ label, error, children, required = false }: { label: string; error?: string; children: React.ReactNode; required?: boolean }) {
-  return (
-    <label>
-      <span className="sample-profile-label"><span>{label}</span><em className={required ? "required" : "optional"}>{required ? "必須" : "任意"}</em></span>
-      {children}
-      {error ? <span className="field-error">{error}</span> : null}
-    </label>
-  );
+  return <div className="sample-ribbon">デモ診断｜回答内容は保存されません</div>;
 }
 
 function ParticipantTabs({ participants, activeId, onSelect, compact = false }: { participants: Participant[]; activeId: number; onSelect: (id: number) => void; compact?: boolean }) {
@@ -461,8 +282,8 @@ function ParticipantTabs({ participants, activeId, onSelect, compact = false }: 
           type="button"
         >
           <span>回答者{index + 1}</span>
-          <strong>{participant.profile.name || "未登録"}</strong>
-          <small>{participant.completed ? "回答済み" : participant.profileComplete ? "登録済み" : "入力中"}</small>
+          <strong>回答者{participant.id}</strong>
+          <small>{participant.completed ? "回答済み" : Object.keys(participant.answers).length > 0 ? "回答中" : "未回答"}</small>
         </button>
       ))}
     </div>
@@ -472,70 +293,52 @@ function ParticipantTabs({ participants, activeId, onSelect, compact = false }: 
 function LiveComparisonReport({ participants, onReset }: { participants: Participant[]; onReset: () => void }) {
   const first = participants[0];
   const second = participants[1];
-  const firstLabel = first.profile.name || "回答者1";
-  const secondLabel = second.profile.name || "回答者2";
+  const isSingle = !second;
+  const firstLabel = isSingle ? "あなたの回答" : "回答者1";
+  const secondLabel = isSingle ? "比較基準（2.00）" : "回答者2";
   const rows = useMemo(() => {
     const firstScores = scoreAnswers(first.answers).small;
-    const secondScores = scoreAnswers(second.answers).small;
+    const secondScores = second ? scoreAnswers(second.answers).small : null;
     return smallThemes.map((theme) => {
       const executiveScore = firstScores[theme.key] ?? 0;
-      const fieldScore = secondScores[theme.key] ?? 0;
+      const fieldScore = secondScores?.[theme.key] ?? 2;
       const gap = round(executiveScore - fieldScore) ?? 0;
       const absoluteGap = round(Math.abs(gap)) ?? 0;
       return { key: theme.key, theme: theme.name, executiveScore, fieldScore, gap, absoluteGap, judgment: judgeGap(absoluteGap) };
     });
-  }, [first.answers, second.answers]);
+  }, [first.answers, second]);
   const topGaps = [...rows].sort((a, b) => b.absoluteGap - a.absoluteGap).slice(0, 3);
   const lowGaps = [...rows].sort((a, b) => a.absoluteGap - b.absoluteGap).slice(0, 3);
   const topNames = topGaps.map((row) => `「${row.theme}」`).join("、");
   const lowNames = lowGaps.map((row) => `「${row.theme}」`).join("、");
+  const summary = isSingle
+    ? `回答傾向を基準スコア2.00と比較すると、特に${topNames}で差が見られました。これは優劣を示すものではなく、ご自身が組織の現状をどう捉えているかを整理するための参考値です。`
+    : `2名の回答を比較した結果、特に${topNames}で認識差が見られました。数値の差を結論とせず、設問ごとの前提を対話で確認するための材料としてご活用ください。`;
 
   return (
-    <section className="sample-live-report sample-offset">
+    <section className="sample-live-report sample-report-page sample-offset">
       <SampleRibbon />
-      <div className="panel">
-        <span className="badge">2名比較デモ結果</span>
-        <h1>リーダーズGAP診断 比較レポート</h1>
-        <p className="muted">2名の実際の回答からブラウザ内で集計した結果です。回答・結果は保存されず、ページを離れると消去されます。</p>
-        <div className="grid two">
-          <div><strong>回答者1</strong><p>{firstLabel}</p></div>
-          <div><strong>回答者2</strong><p>{secondLabel}</p></div>
-        </div>
+      <header className="sample-report-hero">
+        <div><span className="sample-kicker">YOUR DEMO REPORT</span><h1>{isSingle ? "回答傾向レポート" : "2名比較レポート"}</h1><p>{isSingle ? "あなたの回答を8テーマで可視化しました。" : "2名の回答差を8テーマで可視化しました。"}</p></div>
+        <div className="sample-report-score"><span>回答完了</span><strong>{participants.length}</strong><small>名</small></div>
+      </header>
+
+      <section className="sample-report-overview">
+        <div className="sample-report-chart"><div className="sample-section-heading"><span>01</span><div><small>OVERVIEW</small><h2>8テーマの全体像</h2></div></div><RadarComparisonChart data={rows} executiveLabel={firstLabel} fieldLabel={secondLabel} />{isSingle ? <p className="sample-chart-note">比較基準は、デモ表示用に全テーマ2.00で設定しています。</p> : null}</div>
+        <div className="sample-report-summary"><span className="badge">診断サマリー</span><h2>まず確認したい認識のポイント</h2><p>{summary}</p><div className="sample-top-gap-list">{topGaps.map((row, index) => <div key={row.key}><span>0{index + 1}</span><p>{row.theme}</p><strong>{row.gap > 0 ? "+" : ""}{row.gap.toFixed(2)}</strong></div>)}</div></div>
+      </section>
+
+      <section className="sample-report-section"><div className="sample-section-heading"><span>02</span><div><small>DETAIL</small><h2>8テーマ別スコア</h2></div></div><div className="sample-score-grid">{rows.map((row) => <article key={row.key}><h3>{row.theme}</h3><div><span>{firstLabel}</span><strong>{row.executiveScore.toFixed(2)}</strong></div><div><span>{secondLabel}</span><strong>{row.fieldScore.toFixed(2)}</strong></div><footer><span>GAP</span><b>{row.gap > 0 ? "+" : ""}{row.gap.toFixed(2)}</b></footer></article>)}</div></section>
+
+      <div className="sample-report-insights">
+        <ReportText title="GAPが小さいテーマ" text={`${lowNames}は回答差が比較的小さいテーマです。共有できている認識として、今後の対話や施策設計の土台になる可能性があります。`} />
+        <ReportText title="GAPが発生する背景" text="回答差の背景には、役割、判断基準、共有情報、日常業務での経験の違いがある可能性があります。数値だけで判断せず、差が生まれた具体的な場面を確認することが重要です。" />
       </div>
 
-      <div className="panel">
-        <h2>2名の回答比較レーダーチャート</h2>
-        <RadarComparisonChart data={rows} executiveLabel={firstLabel} fieldLabel={secondLabel} />
-      </div>
+      <section className="sample-report-section"><div className="sample-section-heading"><span>03</span><div><small>NEXT ACTION</small><h2>次の一歩の例</h2></div></div><div className="grid two"><BulletList title="短期施策" items={sampleFeedback.shortTerm} /><BulletList title="中期施策" items={sampleFeedback.midTerm} /></div></section>
 
-      <div className="panel table-wrap">
-        <h2>8テーマ別比較表</h2>
-        <table>
-          <thead><tr><th>テーマ</th><th>{firstLabel}</th><th>{secondLabel}</th><th>GAP</th><th>判定</th></tr></thead>
-          <tbody>{rows.map((row) => <tr key={row.key}><td>{row.theme}</td><td>{row.executiveScore.toFixed(2)}</td><td>{row.fieldScore.toFixed(2)}</td><td>{row.gap.toFixed(2)}</td><td>{row.judgment}</td></tr>)}</tbody>
-        </table>
-      </div>
-
-      <div className="grid two">
-        <ComparisonList title="最大GAP上位3" rows={topGaps} />
-        <ComparisonList title="GAPが小さいテーマ" rows={lowGaps} />
-      </div>
-
-      <ReportText title="診断サマリー" text={`${firstLabel}さんと${secondLabel}さんの回答を比較した結果、特に${topNames}で回答差が見られました。数値の差を結論とせず、設問ごとの認識や前提を対話で確認するための材料としてご活用ください。`} />
-      <ReportText title="GAPが少ないテーマ" text={`${lowNames}は、2名の回答差が比較的小さいテーマです。共通認識が形成されている点として、今後の対話や施策設計の土台になる可能性があります。`} />
-      <ReportText title="GAPが発生している要因" text="回答差の背景には、役割、判断基準、共有されている情報、日常業務での経験の違いがある可能性があります。数値だけで判断せず、差が生まれた具体的な場面を相互に確認することが重要です。" />
-
-      <div className="grid two">
-        <ScoreSummary title={`${firstLabel}さんの認識`} rows={rows} scoreKey="executiveScore" />
-        <ScoreSummary title={`${secondLabel}さんの認識`} rows={rows} scoreKey="fieldScore" />
-        <BulletList title="短期施策" items={sampleFeedback.shortTerm} />
-        <BulletList title="中期施策" items={sampleFeedback.midTerm} />
-      </div>
-      <div className="nav">
-        <button type="button" onClick={onReset}>最初から確認する</button>
-        <Link className="button secondary" href="/sample/report">固定のフィードバックサンプルを見る</Link>
-        <Link className="button secondary" href="/sample">紹介ページへ戻る</Link>
-      </div>
+      <section className="sample-report-cta"><small>LEADERS GAP CONSULTATION</small><h2>この結果を、組織の対話につなげませんか？</h2><p>実際の組織での活用方法や、結果の読み解きについてご案内します。</p><Link className="button" href="/sample#contact">結果について相談する<ArrowRight size={18} /></Link></section>
+      <div className="nav sample-report-footer"><button className="secondary" type="button" onClick={onReset}>もう一度診断する</button><Link className="button secondary" href="/sample/report">フィードバックサンプルを見る</Link><Link className="button secondary" href="/sample">紹介ページへ戻る</Link></div>
     </section>
   );
 }
@@ -550,19 +353,22 @@ type ComparisonRow = {
   judgment: string;
 };
 
-function ComparisonList({ title, rows }: { title: string; rows: ComparisonRow[] }) {
-  return <div className="panel table-wrap"><h2>{title}</h2><table><thead><tr><th>テーマ</th><th>GAP</th><th>判定</th></tr></thead><tbody>{rows.map((row) => <tr key={row.key}><td>{row.theme}</td><td>{row.gap.toFixed(2)}</td><td>{row.judgment}</td></tr>)}</tbody></table></div>;
-}
-
 function ReportText({ title, text }: { title: string; text: string }) {
-  return <section className="panel"><h2>{title}</h2><p className="muted">{text}</p></section>;
-}
-
-function ScoreSummary({ title, rows, scoreKey }: { title: string; rows: ComparisonRow[]; scoreKey: "executiveScore" | "fieldScore" }) {
-  const ordered = [...rows].sort((a, b) => b[scoreKey] - a[scoreKey]).slice(0, 4);
-  return <section className="panel"><h2>{title}</h2><ul className="muted">{ordered.map((row) => <li key={row.key}>{row.theme}：{row[scoreKey].toFixed(2)}</li>)}</ul></section>;
+  return <section className="sample-insight-card"><span>INSIGHT</span><h2>{title}</h2><p>{text}</p></section>;
 }
 
 function BulletList({ title, items }: { title: string; items: string[] }) {
-  return <section className="panel"><h2>{title}</h2><ul className="muted">{items.map((item) => <li key={item}>{item}</li>)}</ul></section>;
+  return <section className="sample-action-card"><h3>{title}</h3><ol>{items.map((item, index) => <li key={item}><span>{String(index + 1).padStart(2, "0")}</span>{item}</li>)}</ol></section>;
+}
+
+async function notifySampleCompletion(participantCount: number) {
+  try {
+    await fetch("/api/sample/complete", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ participantCount })
+    });
+  } catch {
+    // Notification failure must never interrupt the demo result.
+  }
 }
