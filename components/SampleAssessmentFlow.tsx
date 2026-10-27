@@ -4,7 +4,7 @@ import Link from "next/link";
 import { ArrowRight, BarChart3, CheckCircle2, ChevronRight, Clock3, ShieldCheck, UserRound, Users, UsersRound } from "lucide-react";
 import { useMemo, useState } from "react";
 import { RadarComparisonChart } from "@/components/RadarComparisonChart";
-import { questions, smallThemes } from "@/lib/questions";
+import { sampleQuestions, smallThemes } from "@/lib/questions";
 import { judgeGap, round, scoreAnswers } from "@/lib/scoring";
 import { sampleFeedback } from "@/lib/sample-report";
 
@@ -62,7 +62,7 @@ export function SampleAssessmentFlow() {
 
   function submitAnswers(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const missing = questions.filter((question) => !activeParticipant.answers[question.id]).map((question) => question.id);
+    const missing = sampleQuestions.filter((question) => !activeParticipant.answers[question.id]).map((question) => question.id);
     if (missing.length > 0) {
       setUnansweredIds(missing);
       setError(`未回答の設問が${missing.length}問あります。すべての設問に回答してください。`);
@@ -125,16 +125,21 @@ export function SampleAssessmentFlow() {
         <SampleRibbon />
         <div className="sample-guide-copy">
           <span className="sample-kicker">LEADERS GAP DEMO</span>
-          <h2>組織の認識差を、<br />まずは自分の回答から。</h2>
-          <p>全48問に回答すると、8つのテーマごとの傾向をその場で確認できます。2名で回答する場合は、同じ端末を順番に使って回答差を比較できます。</p>
+          <h2>組織の認識差を、<br />5分で見える形に。</h2>
+          <p>8テーマ・全24問のデモ診断です。1名なら基準値との比較、2名なら同じ端末を順番に使って回答差を確認できます。</p>
+          <div className="sample-guide-metrics" aria-label="デモ診断の概要">
+            <div><strong>8</strong><span>テーマ</span></div>
+            <div><strong>24</strong><span>設問</span></div>
+            <div><strong>5</strong><span>分</span></div>
+          </div>
           <div className="sample-guide-features">
-            <span><CheckCircle2 size={18} />約5〜10分</span>
+            <span><CheckCircle2 size={18} />所要時間は約5分</span>
             <span><BarChart3 size={18} />回答後すぐに可視化</span>
             <span><ShieldCheck size={18} />入力・回答は保存されません</span>
           </div>
         </div>
         <div className="sample-start-card">
-          <span className="badge">受検人数</span>
+          <span className="badge">STEP 01 ・ 受検人数</span>
           <h3>何名で試しますか？</h3>
           <p className="muted">1名でも診断結果を確認できます。</p>
           <div className="sample-count-selector" role="radiogroup" aria-label="受検人数">
@@ -183,8 +188,8 @@ export function SampleAssessmentFlow() {
   }
 
   const answeredCount = Object.keys(activeParticipant.answers).length;
-  const progress = Math.round((answeredCount / questions.length) * 100);
-  const remainingCount = questions.length - answeredCount;
+  const progress = Math.round((answeredCount / sampleQuestions.length) * 100);
+  const remainingCount = sampleQuestions.length - answeredCount;
   const submitLabel = activeParticipant.completed
     ? "回答内容を更新する"
     : participants.length === 2 && completedCount === 1
@@ -214,14 +219,14 @@ export function SampleAssessmentFlow() {
         </div>
         {participants.length > 1 ? <ParticipantTabs participants={participants} activeId={activeId} onSelect={selectParticipant} compact /> : null}
         <div className="assessment-progress-meta">
-          <span><CheckCircle2 size={16} aria-hidden="true" />{questions.length}問中 {answeredCount}問回答済み</span>
+          <span><CheckCircle2 size={16} aria-hidden="true" />{sampleQuestions.length}問中 {answeredCount}問回答済み</span>
           <span><Clock3 size={16} aria-hidden="true" />残り {remainingCount}問</span>
         </div>
         <div className="progress-wrap" aria-label={`回答進捗 ${progress}%`}><div className="progress-bar" style={{ width: `${progress}%` }} /></div>
       </div>
 
       {smallThemes.map((theme, themeIndex) => {
-        const themeQuestions = questions.filter((question) => question.smallThemeKey === theme.key);
+        const themeQuestions = sampleQuestions.filter((question) => question.smallThemeKey === theme.key);
         const themeRemaining = themeQuestions.filter((question) => !activeParticipant.answers[question.id]).length;
         return (
         <section className="assessment-theme-card" key={theme.key}>
@@ -237,7 +242,7 @@ export function SampleAssessmentFlow() {
           <div className="assessment-question-list">
           {themeQuestions.map((question) => (
             <div className={`question assessment-question ${unansweredIds.includes(question.id) ? "unanswered" : ""}`} id={`question-${question.id}`} key={question.id}>
-              <div className="assessment-question-copy"><span>Q{question.id}</span><p>{question.text}</p></div>
+              <div className="assessment-question-copy"><span>Q{sampleQuestions.findIndex((item) => item.id === question.id) + 1}</span><p>{question.text}</p></div>
               <div className="scale">
                 {[1, 2, 3, 4, 5].map((value) => (
                   <label key={value}>

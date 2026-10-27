@@ -153,6 +153,23 @@ export const questions: Question[] = [
   q(48, "delegation_execution", "定められている判断権限の範囲であっても、実務上は上位者の確認や判断が求められることがある")
 ];
 
+// The public demo uses a representative three-question set for each theme.
+// Question content remains sourced from the production assessment definition.
+export const sampleQuestionIds = [
+  1, 4, 6,
+  7, 10, 11,
+  13, 16, 18,
+  19, 20, 24,
+  25, 28, 29,
+  31, 34, 36,
+  37, 41, 42,
+  43, 45, 47
+] as const;
+
+export const sampleQuestions = questions.filter((question) =>
+  sampleQuestionIds.includes(question.id as (typeof sampleQuestionIds)[number])
+);
+
 export function smallThemeName(key: string) {
   return smallThemes.find((theme) => theme.key === key)?.name ?? key;
 }
