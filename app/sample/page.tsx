@@ -1,10 +1,9 @@
 import Link from "next/link";
-import { MessageCircleMore, Route, Waypoints } from "lucide-react";
 import type { Metadata } from "next";
 import type React from "react";
 import { ContactForm } from "@/components/ContactForm";
 import { RadarComparisonChart } from "@/components/RadarComparisonChart";
-import { sampleReportThemes } from "@/lib/sample-report";
+import { sampleFeedback, sampleReportThemes, sampleTopGaps } from "@/lib/sample-report";
 import { createPageMetadata } from "@/lib/site-metadata";
 
 export const metadata: Metadata = createPageMetadata({
@@ -119,38 +118,37 @@ export default function SampleLandingPage() {
       </header>
 
       <section className="lgap-hero">
-        <div className="lgap-wrap">
-          <div className="lgap-hero-main">
+        <div className="lgap-wrap lgap-hero-grid">
+          <div className="lgap-hero-content">
             <div className="lgap-tag">社長のための権限移譲プログラム｜リーダーズGAP</div>
-            <h1>社長が任せて、<br className="lgap-mobile-break" />幹部が動く会社へ</h1>
+            <h1>社長が任せて、<br />幹部が動く会社へ</h1>
             <p className="lgap-hero-copy">
               リーダーズGAPは、社長・幹部・現場の三方向から「任せたつもり」と「任されたつもり」のズレを測り、任せる範囲と進め方を整える権限移譲プログラムです。
             </p>
+            <div className="lgap-hero-actions">
+              <a href={demoAssessmentUrl} className="lgap-btn-primary">デモ診断を試す（無料・約5分）</a>
+              <a href="#contact" className="lgap-btn-secondary">権限移譲について相談する</a>
+            </div>
+            <div className="lgap-sub">※ 社長お一人でも受検できます</div>
           </div>
 
-          <div className="lgap-hero-points">
-            <div className="lgap-hero-point">
-              <Waypoints aria-hidden="true" />
-              <span>研修のような一方向ではなく、<strong>三方向で測る</strong></span>
+          <aside className="lgap-hero-report" aria-label="フィードバックレポート例">
+            <div className="lgap-hero-report-head">
+              <div><span>フィードバックレポート例</span><h2>経営側と現場側の認識差</h2></div>
+              <strong>サンプルデータ</strong>
             </div>
-            <div className="lgap-hero-point">
-              <MessageCircleMore aria-hidden="true" />
-              <span>評価に関わらない第三者だから、<strong>本音が出る</strong></span>
+            <HeroRadarPreview />
+            <div className="lgap-hero-gap-list">
+              <span>最大GAP 上位3</span>
+              {sampleTopGaps.map((row, index) => (
+                <div key={row.key}><b>0{index + 1}</b><p>{row.theme}</p><strong>+{row.gap?.toFixed(2)}</strong></div>
+              ))}
             </div>
-            <div className="lgap-hero-point">
-              <Route aria-hidden="true" />
-              <span>明日から使える<strong>「任せ方の型」</strong>を渡す</span>
-            </div>
-          </div>
-
-          <div className="lgap-hero-actions">
-            <a href={demoAssessmentUrl} className="lgap-btn-primary">デモ診断を試す（無料・約5分）</a>
-            <a href="#contact" className="lgap-btn-secondary">権限移譲について相談する</a>
-          </div>
-          <div className="lgap-sub">※ 社長お一人でも受検できます</div>
+            <p className="lgap-hero-report-summary">{sampleFeedback.summary.split("\n\n")[0]}</p>
+            <Link href="/sample/report" className="lgap-hero-report-link">フィードバック全体を見る <span>→</span></Link>
+          </aside>
         </div>
       </section>
-
       <section className="lgap-sec">
         <div className="lgap-wrap">
           <SectionHead eyebrow="Issue" title={<>任せたのに、思っていた形で上がってこない。<br />そんなことが続いていませんか。</>} lead="制度や施策が足りないのではありません。組織が一定の規模に育つほど、構造的に「本音が届かない・徹底しきれない」状態が生まれます。" />
@@ -343,6 +341,51 @@ export default function SampleLandingPage() {
   );
 }
 
+function HeroRadarPreview() {
+  const centerX = 220;
+  const centerY = 126;
+  const radius = 78;
+  const axisCount = sampleReportThemes.length;
+  const point = (index: number, distance: number) => {
+    const angle = -Math.PI / 2 + (Math.PI * 2 * index) / axisCount;
+    return [centerX + Math.cos(angle) * distance, centerY + Math.sin(angle) * distance] as const;
+  };
+  const polygon = (scores: number[], scale = radius) => scores
+    .map((score, index) => point(index, (score / 5) * scale).join(","))
+    .join(" ");
+
+  return (
+    <div className="lgap-hero-radar" role="img" aria-label="経営側と現場側の8テーマ比較レーダーチャート例">
+      <svg viewBox="0 0 440 270" aria-hidden="true">
+        {[1, 2, 3, 4, 5].map((level) => (
+          <polygon className="lgap-radar-grid" key={level} points={polygon(Array(axisCount).fill(level), radius)} />
+        ))}
+        {sampleReportThemes.map((theme, index) => {
+          const [x, y] = point(index, radius);
+          const [labelX, labelY] = point(index, radius + 28);
+          const anchor = labelX < centerX - 8 ? "end" : labelX > centerX + 8 ? "start" : "middle";
+          return (
+            <g key={theme.key}>
+              <line className="lgap-radar-axis" x1={centerX} y1={centerY} x2={x} y2={y} />
+              <text className="lgap-radar-label" x={labelX} y={labelY + 3} textAnchor={anchor}>{theme.theme}</text>
+            </g>
+          );
+        })}
+        <polygon className="lgap-radar-executive" points={polygon(sampleReportThemes.map((row) => row.executiveScore))} />
+        <polygon className="lgap-radar-field" points={polygon(sampleReportThemes.map((row) => row.fieldScore))} />
+        {sampleReportThemes.map((row, index) => {
+          const [executiveX, executiveY] = point(index, (row.executiveScore / 5) * radius);
+          const [fieldX, fieldY] = point(index, (row.fieldScore / 5) * radius);
+          return <g key={row.key}><circle className="lgap-radar-executive-dot" cx={executiveX} cy={executiveY} r="2.6" /><circle className="lgap-radar-field-dot" cx={fieldX} cy={fieldY} r="2.6" /></g>;
+        })}
+        <g className="lgap-radar-legend">
+          <line x1="151" y1="252" x2="171" y2="252" className="lgap-radar-executive-line" /><text x="177" y="255">経営側</text>
+          <line x1="241" y1="252" x2="261" y2="252" className="lgap-radar-field-line" /><text x="267" y="255">現場側</text>
+        </g>
+      </svg>
+    </div>
+  );
+}
 function SectionHead({ eyebrow, title, lead }: { eyebrow: string; title: React.ReactNode; lead: string }) {
   return (
     <>

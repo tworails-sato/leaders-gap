@@ -142,6 +142,7 @@ export function SampleAssessmentFlow() {
           <span className="badge">STEP 01 ・ 受検人数</span>
           <h3>何名で試しますか？</h3>
           <p className="muted">1名でも診断結果を確認できます。</p>
+          <p className="sample-count-limit"><UsersRound size={17} aria-hidden="true" />デモは2名まで体験できます</p>
           <div className="sample-count-selector" role="radiogroup" aria-label="受検人数">
             <button className={participantCount === 1 ? "active" : ""} onClick={() => setParticipantCount(1)} role="radio" aria-checked={participantCount === 1} type="button"><UserRound size={24} /><strong>1名で体験</strong><span>基準値と比較</span></button>
             <button className={participantCount === 2 ? "active" : ""} onClick={() => setParticipantCount(2)} role="radio" aria-checked={participantCount === 2} type="button"><UsersRound size={24} /><strong>2名で体験</strong><span>回答差を比較</span></button>
