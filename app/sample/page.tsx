@@ -121,7 +121,7 @@ export default function SampleLandingPage() {
         <div className="lgap-wrap lgap-hero-grid">
           <div className="lgap-hero-content">
             <div className="lgap-tag">社長のための権限移譲プログラム｜リーダーズGAP</div>
-            <h1>社長が任せて、<br />幹部が動く会社へ</h1>
+            <h1>社長が任せて、<br />組織が自ら動く会社へ</h1>
             <p className="lgap-hero-copy">
               リーダーズGAPは、社長・幹部・現場の三方向から「任せたつもり」と「任されたつもり」のズレを測り、任せる範囲と進め方を整える権限移譲プログラムです。
             </p>
