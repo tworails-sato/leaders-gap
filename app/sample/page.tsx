@@ -336,7 +336,10 @@ export default function SampleLandingPage() {
         </div>
       </section>
 
-      <footer className="lgap-footer">合同会社Two rails ｜ リーダーズGAP診断</footer>
+      <footer className="lgap-footer">
+        <a href="https://www.t-rails.com/" target="_blank" rel="noreferrer">合同会社Two rails</a>
+        <span> ｜ リーダーズGAP診断</span>
+      </footer>
     </main>
   );
 }
