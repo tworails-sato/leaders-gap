@@ -60,6 +60,18 @@ const leadersGapItems = [
   "任せきりにせず、実行・定着まで伴走する"
 ];
 
+const commonInitiativeItems = [
+  "変える対象は社員（研修・1on1）",
+  "経営側の課題は見えないまま",
+  "時間がたつと、元に戻りやすい"
+];
+
+const mutualChangeItems = [
+  "社長・幹部・現場のすべてが対象",
+  "経営側の「任せたつもり」も数字で見える",
+  "経営側・現場側それぞれの打ち手を決め、実行まで伴走する"
+];
+
 const themes = [
   "戦略の一致",
   "優先順位の一致",
@@ -121,9 +133,9 @@ export default function SampleLandingPage() {
         <div className="lgap-wrap lgap-hero-grid">
           <div className="lgap-hero-content">
             <div className="lgap-tag">社長のための権限移譲プログラム｜リーダーズGAP</div>
-            <h1>社長が任せて、<br />組織が自ら動く会社へ</h1>
+            <h1>経営と現場が、<br />同じ方向を向ける組織へ。</h1>
             <p className="lgap-hero-copy">
-              リーダーズGAPは、社長・幹部・現場の三方向から「任せたつもり」と「任されたつもり」のズレを測り、任せる範囲と進め方を整える権限移譲プログラムです。
+              <strong>リーダーズGAPは、経営と現場の「相互変革」を促すプログラムです。</strong>社長・幹部・現場の三方向から「任せたつもり」と「任されたつもり」のズレを測り、社員だけでなく、経営側の任せ方も一緒に見直します。
             </p>
             <div className="lgap-hero-actions">
               <a href={demoAssessmentUrl} className="lgap-btn-primary">デモ診断を試す（無料・約5分）</a>
@@ -149,6 +161,18 @@ export default function SampleLandingPage() {
           </aside>
         </div>
       </section>
+
+      <section className="lgap-sec lgap-gray">
+        <div className="lgap-wrap">
+          <SectionHead eyebrow="Mutual Change" title="社員だけを変えても、組織は変わらない。" lead="研修や1on1で変わるのは、受けた社員です。でも、任せ方・決め方・伝え方が変わらなければ、現場はやがて元に戻ります。リーダーズGAPは、現場の声をもとに、経営側にも変えるべき点を示します。" />
+          <div className="lgap-vs">
+            <AssessmentColumn title="よくある組織施策" items={commonInitiativeItems} tone="old" />
+            <AssessmentColumn title="リーダーズGAP（相互変革）" items={mutualChangeItems} tone="new" />
+          </div>
+          <div className="lgap-vs-concl">変わるのは、現場だけではありません。</div>
+        </div>
+      </section>
+
       <section className="lgap-sec">
         <div className="lgap-wrap">
           <SectionHead eyebrow="Issue" title={<>任せたのに、思っていた形で上がってこない。<br />そんなことが続いていませんか。</>} lead="制度や施策が足りないのではありません。組織が一定の規模に育つほど、構造的に「本音が届かない・徹底しきれない」状態が生まれます。" />
@@ -308,6 +332,7 @@ export default function SampleLandingPage() {
                 経営陣ならびに全店舗で約20名にインタビューと診断を実施。結果、経営陣が感じていた課題とは異なり、若手は業務にやりがいを感じており、むしろ長期的に働きたいという声が多かった。一方、3年目（主任・店長クラス）で大きくエンゲージメントが低下していることが判明。「自分がマネジメントになっても、若手への見せられ方が描けていない」という、長期を見越した若手育成の仕組みづくりが優先課題と分かった。
               </CaseBlock>
             </div>
+            <div className="lgap-issue-note lgap-case-insight"><strong>経営陣が想定していた課題と、実際の課題は違っていました。打ち手は、現場の研修だけでなく、経営陣との全員面談や店舗への権限委譲など、経営側の動きにも及びました。</strong></div>
             <div className="lgap-case-actions">
               <div className="lgap-ca-head">結果とアクション</div>
               <div className="lgap-ca-grid">
@@ -399,10 +424,10 @@ function SectionHead({ eyebrow, title, lead }: { eyebrow: string; title: React.R
   );
 }
 
-function AssessmentColumn({ title, badge, items, tone }: { title: string; badge: string; items: string[]; tone: "old" | "new" }) {
+function AssessmentColumn({ title, badge, items, tone }: { title: string; badge?: string; items: string[]; tone: "old" | "new" }) {
   return (
     <div className={`lgap-vs-col lgap-vs-${tone}`}>
-      <span className="lgap-vs-badge">{badge}</span>
+      {badge ? <span className="lgap-vs-badge">{badge}</span> : null}
       <h3>{title}</h3>
       <ul>
         {items.map((item) => <li key={item}>{item}</li>)}

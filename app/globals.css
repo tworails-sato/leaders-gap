@@ -1430,6 +1430,11 @@ th {
   max-width: 900px;
 }
 
+.lgap-hero-copy strong {
+  color: var(--lgap-navy);
+  font-weight: 800;
+}
+
 .lgap-hero-main {
   max-width: 1080px;
 }
@@ -2118,6 +2123,12 @@ th {
 .lgap-case-actions {
   border-radius: 12px;
   padding: 28px 32px;
+}
+
+.lgap-case-insight {
+  margin-bottom: 24px;
+  margin-top: 0;
+  max-width: none;
 }
 
 .lgap-ca-head {
