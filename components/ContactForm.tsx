@@ -4,6 +4,7 @@ import type React from "react";
 import { useEffect, useState } from "react";
 
 const subjects = [
+  "試算の結果について相談したい",
   "プログラムの詳細や実績を知りたい",
   "費用や導入について知りたい",
   "協業・提携について",

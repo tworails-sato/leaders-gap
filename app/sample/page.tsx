@@ -1,121 +1,35 @@
 import Link from "next/link";
-import { ArrowLeftRight, CheckCircle2, Clock3 } from "lucide-react";
+import { MessageCircle, Network, RefreshCw } from "lucide-react";
 import type { Metadata } from "next";
 import type React from "react";
 import { ContactForm } from "@/components/ContactForm";
-import { CostCalculator } from "@/components/CostCalculator";
-import { RadarComparisonChart } from "@/components/RadarComparisonChart";
-import { sampleFeedback, sampleReportThemes, sampleTopGaps } from "@/lib/sample-report";
+import { ValueSimulation } from "@/components/ValueSimulation";
 import { createPageMetadata } from "@/lib/site-metadata";
 
 export const metadata: Metadata = createPageMetadata({
-  title: "リーダーズGAP｜経営と現場の“見えないGAP”を可視化する組織アセスメント｜デモ診断",
-  path: "/sample"
+  title: "リーダーズGAP｜経営と現場の“見えないGAP”を可視化する組織アセスメント",
+  path: "/sample",
+  description: "経営者の任せ方と現場の受け方のずれを数字にし、組織のルールとして整える6か月のプログラムです。"
 });
 
 const demoAssessmentUrl = "https://gap.ceo-sherpa.com/sample/assessment";
 
 const issues = [
-  {
-    title: "本音を伝えられない",
-    body: "階層と部門が増えるほど、現場で本当に起きていること・感じていることが、そのまま経営には届かなくなる。"
-  },
-  {
-    title: "全体最適の施策・徹底が難しい",
-    body: "本社が全体最適で打つ施策が、部門ごと・工程ごとの実態とズレ、現場に浸透しきらない。"
-  },
-  {
-    title: "徹底度が追いきれない",
-    body: "組織が大きくなるほど、決めたことがどこまで実行されているかを、経営・人事が把握しきれない。"
-  }
+  { title: "手戻りが止まらない", body: "指示と上がってくる成果物が合わず、やり直しと確認の往復が続く" },
+  { title: "結局、上が巻き取る", body: "「自分がやったほうが早い」と、経営者やリーダーが仕事を抱え込む" },
+  { title: "期待して迎えた人が辞める", body: "期待とのずれが埋まらないまま、力を発揮しきれずに去ってしまう" }
 ];
 
-const valuePairs = [
-  {
-    issue: "本音を伝えられない",
-    value: "第三者だからこそ、拾える本音がある",
-    body: "評価に響かない中立の立場だからこそ、現場の本音を引き出し、ズレを可視化できます。"
-  },
-  {
-    issue: "全体最適の施策・徹底が難しい",
-    value: "「どこにズレがあるか」を論点化する",
-    body: "誰が悪いかではなく、経営と現場・部門間の\"認識の差分\"を特定し、打ち手の的を絞ります。"
-  },
-  {
-    issue: "徹底度が追いきれない",
-    value: "旗振り・定点観測まで伴走する",
-    body: "可視化して終わりではなく、施策の実行と定着を、外部の視点で継続的に支えます。"
-  }
+const featureBars = [
+  { label: "権限移譲の実行", value: 2.1 },
+  { label: "決定権の所在の一致", value: 1.8 },
+  { label: "戦略の一致", value: 1.3 }
 ];
 
-const oldAssessmentItems = [
-  "経営層・管理職・現場を、それぞれ別々に評価する",
-  "打ち手も「管理職研修」などレイヤー単位になりがち",
-  "各層は改善しても、層と層の\"間\"のズレは残る",
-  "結果として、組織全体では変わらない"
-];
-
-const leadersGapItems = [
-  "経営と現場の「上下」、部門・工程間の「左右」を両側から捉える",
-  "層の間・部門の間に生じる\"認識のズレ\"そのものを論点化",
-  "組織全体で取り組める打ち手を提案する",
-  "任せきりにせず、実行・定着まで伴走する"
-];
-
-const commonInitiativeItems = [
-  "変える対象は社員（研修・1on1）",
-  "経営側の課題は見えないまま",
-  "時間がたつと、元に戻りやすい"
-];
-
-const mutualChangeItems = [
-  "経営者・幹部・現場のすべてが対象",
-  "経営側の「任せたつもり」も数字で見える",
-  "経営側・現場側それぞれの打ち手を決め、実行まで伴走する"
-];
-
-const themes = [
-  "戦略の一致",
-  "優先順位の一致",
-  "成果と評価の一致",
-  "決定権の所在",
-  "実務と設計の一致",
-  "改善と運用の一致",
-  "意思決定プロセス",
-  "権限移譲の実行"
-];
-
-const processSteps = [
-  "対象・部門・人数を決定",
-  "回答者ごとに専用URLを発行",
-  "経営側・現場側が回答",
-  "認識差を集計・分析",
-  "FBと次の施策を整理"
-];
-
-const answers = [
-  {
-    who: "人事部門",
-    question: "「施策は全社で管轄している。外部のサービスは入れにくい」",
-    answer: "全社施策は前提として、その隙間や現場の本音を汲むためのアシストです。既存の取り組みと競合しません。"
-  },
-  {
-    who: "現場・部門",
-    question: "「また余計な施策や取り組みが増えるのでは」",
-    answer: "新たな取り組みではなく、既存業務の中で改善できることにフォーカスします。現場の負担は最小限です。"
-  },
-  {
-    who: "社員",
-    question: "「どうせ何を言っても変わらないのでは」",
-    answer: "中立の第三者だからこそ、言いづらいことをきちんと経営へ提言します。声が施策に反映されます。"
-  }
-];
-
-const caseActions = [
-  ["全員面談実施", "リーダー層と経営陣の全員面談で認識差を把握"],
-  ["若手向けスタンス教育", "3年目リーダー層の育成プログラムを設計"],
-  ["裁量権の試験的実施", "店舗への権限委譲を段階的に実施"],
-  ["効果計測を継続", "定着率・生産性の変化を継続的にモニタリング"]
+const programSteps = [
+  { label: "STEP 1", title: "可視化", body: "経営者・リーダー・メンバー全員への診断とインタビューで、組織のどこで認識がずれているかを明らかにします" },
+  { label: "STEP 2", title: "ルールづくり", body: "ずれをもとに、任せる範囲・判断の基準・報告のしかたを、組織のルールとして設計します" },
+  { label: "STEP 3", title: "定着", body: "ルールが現場で回っているかを定点で確かめ、ずれが出たところを直しながら、風土として根付くまで支えます" }
 ];
 
 export default function SampleLandingPage() {
@@ -123,361 +37,90 @@ export default function SampleLandingPage() {
     <main className="lgap-lp">
       <header className="lgap-header">
         <div className="lgap-wrap lgap-hd">
-          <div className="lgap-logo">
-            <img src="/lgap-mark.png" alt="" aria-hidden="true" />
-            <span className="lgap-logo-text">リーダーズ<span>GAP</span></span>
-          </div>
+          <div className="lgap-logo"><img src="/lgap-mark.png" alt="" aria-hidden="true" /><span className="lgap-logo-text">リーダーズ<span>GAP</span></span></div>
           <a href="#contact" className="lgap-header-cta">無料相談</a>
         </div>
       </header>
 
-      <section className="lgap-hero">
-        <div className="lgap-wrap lgap-hero-grid">
-          <div className="lgap-hero-content">
-            <div className="lgap-tag">経営者・人事ご担当者の方へ</div>
-            <h1>経営と現場が、<br />同じ方向を向ける組織へ。</h1>
-            <p className="lgap-hero-copy">
-              <strong>リーダーズGAPは、経営と現場の「相互変革」を促すプログラムです。</strong>経営者・幹部・現場の三方向から「任せたつもり」と「任されたつもり」のズレを測り、社員だけでなく、経営側の任せ方も一緒に見直します。
-            </p>
-            <div className="lgap-hero-actions">
-              <a href={demoAssessmentUrl} className="lgap-btn-primary">デモ診断を試す（無料・約5分）</a>
-              <a href="#contact" className="lgap-btn-secondary">権限移譲について相談する</a>
-            </div>
-            <div className="lgap-sub">※ 経営者お一人でも受検できます</div>
-          </div>
-
-          <aside className="lgap-hero-report" aria-label="フィードバックレポート例">
-            <div className="lgap-hero-report-head">
-              <div><span>フィードバックレポート例</span><h2>経営側と現場側の認識差</h2></div>
-              <strong>サンプルデータ</strong>
-            </div>
-            <HeroRadarPreview />
-            <div className="lgap-hero-gap-list">
-              <span>最大GAP 上位3</span>
-              {sampleTopGaps.map((row, index) => (
-                <div key={row.key}><b>0{index + 1}</b><p>{row.theme}</p><strong>+{row.gap?.toFixed(2)}</strong></div>
-              ))}
-            </div>
-            <p className="lgap-hero-report-summary">{sampleFeedback.summary.split("\n\n")[0]}</p>
-            <Link href="/sample/report" className="lgap-hero-report-link">フィードバック全体を見る <span>→</span></Link>
-          </aside>
+      <section className="lgap-hero lgap-section-anchor" id="top">
+        <div className="lgap-wrap lgap-hero-main">
+          <div className="lgap-tag">経営者・人事ご担当者の方へ</div>
+          <h1>経営と現場が、<br />同じ方向を向ける組織へ。</h1>
+          <p className="lgap-hero-copy">経営者の「任せ方」と現場の「受け方」。そのずれを診断で数字にし、組織のルールとして整えていく6か月のプログラムです。</p>
+          <div className="lgap-hero-actions"><a href="#simulation" className="lgap-btn-primary">貴社の数字で試算する</a><a href="#contact" className="lgap-btn-secondary">相談する</a></div>
+          <div className="lgap-hero-demo-link">実際の回答画面も確認できます。<Link href={demoAssessmentUrl}>デモ診断を試す（無料・約5分）</Link></div>
         </div>
       </section>
 
-      <section className="lgap-sec lgap-gray">
+      <section className="lgap-sec lgap-section-anchor" id="issue">
         <div className="lgap-wrap">
-          <SectionHead eyebrow="Mutual Change" title="社員だけを変えても、組織は変わらない。" lead="研修や1on1で変わるのは、受けた社員です。でも、任せ方・決め方・伝え方が変わらなければ、現場はやがて元に戻ります。リーダーズGAPは、現場の声をもとに、経営側にも変えるべき点を示します。" />
-          <div className="lgap-vs">
-            <AssessmentColumn title="よくある組織施策" items={commonInitiativeItems} tone="old" />
-            <AssessmentColumn title="リーダーズGAP（相互変革）" items={mutualChangeItems} tone="new" />
-          </div>
-          <div className="lgap-vs-concl">変わるのは、現場だけではありません。</div>
-        </div>
-      </section>
-
-      <section className="lgap-sec">
-        <div className="lgap-wrap">
-          <SectionHead eyebrow="Issue" title={<>任せたのに、思っていた形で上がってこない。<br />そんなことが続いていませんか。</>} lead="制度や施策が足りないのではありません。組織が一定の規模に育つほど、構造的に「本音が届かない・徹底しきれない」状態が生まれます。" />
+          <SectionHead eyebrow="Issue" title="任せたはずが、思った形で上がってこない" />
           <div className="lgap-issue-grid">
-            {issues.map((issue, index) => (
-              <article className="lgap-issue-card" key={issue.title}>
-                <div className="lgap-issue-num">{String(index + 1).padStart(2, "0")}</div>
-                <h3>{issue.title}</h3>
-                <p>{issue.body}</p>
-              </article>
-            ))}
+            {issues.map((issue, index) => <article className="lgap-issue-card" key={issue.title}><div className="lgap-issue-num">{String(index + 1).padStart(2, "0")}</div><h3>{issue.title}</h3><p>{issue.body}</p></article>)}
           </div>
-          <div className="lgap-issue-note">これらは<b>努力不足ではなく</b>、組織が一定の規模に育つときに<b>構造的に生じるもの</b>です。</div>
+          <div className="lgap-issue-note">誰かの努力不足ではありません。組織が大きくなるときに、どの会社でも起きる<b>「認識のずれ」</b>です。</div>
         </div>
       </section>
 
-      <section className="lgap-sec lgap-gray">
+      <section className="lgap-sec lgap-gray lgap-section-anchor" id="simulation">
         <div className="lgap-wrap">
-          <SectionHead eyebrow="Cost" title="管理職がうまく立ち上がらないと、いくら失うか" lead="貴社の数字を入れると、見えにくい損失を試算できます。" />
-          <CostCalculator />
+          <SectionHead eyebrow="Simulation" title="ずれが減ると、どれだけ付加価値を生み出せるか" lead="手戻り、認識違いによる確認の往復、離職や欠員。こうした「ずれ」に取られている時間が減れば、同じ人数のままで生み出せる粗利が増えます。貴社の数字で試算してみてください。" />
+          <ValueSimulation />
         </div>
       </section>
 
-      <section className="lgap-sec">
+      <section className="lgap-sec lgap-section-anchor" id="feature">
         <div className="lgap-wrap">
-          <SectionHead eyebrow="Value" title="なぜ、リーダーズGAPで改善できるのか" lead="3つの構造的な課題に対し、「第三者からの可視化」という仕組みで、それぞれに応えます。" />
-          <div className="lgap-pair">
-            {valuePairs.map((pair, index) => (
-              <div className="lgap-pair-row" key={pair.issue}>
-                <div className="lgap-pair-issue">
-                  <div className="lgap-k">課題 {String(index + 1).padStart(2, "0")}</div>
-                  <h4>{pair.issue}</h4>
-                </div>
-                <div className="lgap-pair-arrow">→</div>
-                <div className="lgap-pair-val">
-                  <div className="lgap-k">リーダーズGAP</div>
-                  <h4>{pair.value}</h4>
-                  <p>{pair.body}</p>
-                </div>
-              </div>
-            ))}
+          <SectionHead eyebrow="Feature" title="現場だけでなく、経営も一緒に変わる" />
+          <div className="lgap-feature-grid">
+            <FeatureCard icon={<RefreshCw aria-hidden="true" />} number="01" title="相互変革">研修や1on1は、受けた人しか変わりません。リーダーズGAPは経営者の任せ方・決め方も見直すので、組織が元に戻りにくくなります</FeatureCard>
+            <FeatureCard icon={<MessageCircle aria-hidden="true" />} number="02" title="社外の第三者だから、本音が集まる">社内の人が聞いても出てこない声を、利害のない立場で集め、経営に届けます</FeatureCard>
+            <FeatureCard icon={<Network aria-hidden="true" />} number="03" title="階層と部門をまたいで見る">経営と現場の上下だけでなく、部門どうしの左右のずれも、同じ物差しで測ります</FeatureCard>
           </div>
-        </div>
-      </section>
-
-      <section className="lgap-sec lgap-gray">
-        <div className="lgap-wrap">
-          <SectionHead eyebrow="Onboarding" title="新しく管理職を迎える会社の場合" lead="外から入った管理職の方は、経営者が何を任せたつもりで、どこまで自分で決めてよいのかが見えないまま走り出しがちです。リーダーズGAPでは、入社の段階で経営者と管理職の両方に診断を受けていただき、認識のずれを早いうちに埋めていきます。" />
-          <div className="lgap-onboarding-grid">
-            <article><CheckCircle2 aria-hidden="true" /><p>管理職が自分で決めてよい範囲がはっきりし、経営者への相談が「判断が必要なこと」だけになる</p></article>
-            <article><Clock3 aria-hidden="true" /><p>手戻りや手直しが減り、経営者が経営の仕事に時間を使える</p></article>
-            <article><ArrowLeftRight aria-hidden="true" /><p>現場が「経営者の指示」と「管理職の指示」の食い違いで迷わなくなる</p></article>
-          </div>
-          <div className="lgap-onboarding-metrics">
-            <h3>確かめる数字</h3>
-            <ul>
-              <li>経営者と管理職の認識のずれ（始めと終わりの診断で比較）</li>
-              <li>入社後3か月時点の目標達成状況</li>
-              <li>経営者が手戻り・手直し・やり取りに使う時間</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <section className="lgap-sec">
-        <div className="lgap-wrap">
-          <SectionHead eyebrow="Design" title="通常のアセスメントとの、思想の違い" lead="レイヤー単位で測り、レイヤー単位で手を打つ——それでは組織全体は変わりません。リーダーズGAPは「相互変革」を思想に置いています。" />
-          <div className="lgap-vs">
-            <AssessmentColumn title="レイヤー単位で測り、レイヤー単位で解決する" badge="通常のアセスメント" items={oldAssessmentItems} tone="old" />
-            <AssessmentColumn title="上下・左右の聞き取りで、組織自体の課題を明確にする" badge="リーダーズGAP" items={leadersGapItems} tone="new" />
-          </div>
-          <div className="lgap-vs-concl">リーダーズGAPの思想は<span>「相互変革」</span>。<br />組織全体で取り組める打ち手の提案と、任せきりにしない伴走こそが価値です。</div>
-
-          <div className="lgap-fig">
-            <div className="lgap-fig-box lgap-fig-std">
-              <div className="lgap-lbl">標準のリーダーズGAP</div>
-              <h4>上下 1軸</h4>
-              <div className="lgap-node lgap-node-navy">経営・管理職</div>
-              <div className="lgap-arrow-v">↕</div>
-              <div className="lgap-node lgap-node-navy">現場・担当</div>
+          <div className="lgap-feature-report lgap-section-anchor" id="sample-report">
+            <div className="lgap-feature-report-head"><div><span>結果の見え方</span><h3>ずれが大きい項目（上位3つ）</h3></div><strong>イメージ例</strong></div>
+            <div className="lgap-feature-bars">
+              {featureBars.map((item) => <div className="lgap-feature-bar-row" key={item.label}><span>{item.label}</span><div><i style={{ width: `${(item.value / 2.1) * 100}%` }} /></div><b>+{item.value.toFixed(2)}</b></div>)}
             </div>
-            <div className="lgap-arrow-r">→</div>
-            <div className="lgap-fig-box lgap-fig-cus">
-              <div className="lgap-lbl">カスタム設計</div>
-              <h4>上下 ＋ 左右（管理職間・職種間・工程間の受け渡し）</h4>
-              <div className="lgap-mrow">
-                <div className="lgap-node lgap-node-out">管理職</div>
-                <div className="lgap-hbar">↔</div>
-                <div className="lgap-node lgap-node-out">管理職</div>
-              </div>
-              <div className="lgap-arrow-v">↕</div>
-              <div className="lgap-node lgap-node-out lgap-node-center">担当</div>
-              <div className="lgap-role-row">
-                <div className="lgap-node lgap-node-blue">客先対応</div>
-                <div className="lgap-node lgap-node-blue">工程・製造準備</div>
-                <div className="lgap-node lgap-node-blue">品質</div>
-              </div>
-            </div>
-          </div>
-
-          <div className="lgap-report-wrap" id="sample-report">
-            <div className="lgap-cap">▼ アウトプットイメージ（フィードバックレポート例）</div>
-            <div className="lgap-report-frame">
-              <RadarComparisonChart data={sampleReportThemes} executiveLabel="経営側" fieldLabel="現場側" />
-              <p>レポートイメージ例です。実際のスコアは、受検いただいた回答結果に基づいて集計されます。</p>
-              <Link href="/sample/report" className="lgap-link-button">フィードバックサンプルを見る</Link>
-            </div>
-          </div>
-
-          <div className="lgap-theme-grid">
-            {themes.map((theme, index) => (
-              <div className="lgap-theme-chip" key={theme}><span>THEME {String(index + 1).padStart(2, "0")}</span>{theme}</div>
-            ))}
+            <p>経営側は「権限は伝えている」と考える一方、現場側は「判断してよい範囲や優先順位が分からない」と感じている、といったずれが数字で見えます。</p>
+            <Link href="/sample/report" className="lgap-link-button">フィードバックサンプルを見る</Link>
           </div>
         </div>
       </section>
 
-      <section className="lgap-sec lgap-gray" id="diff">
+      <section className="lgap-sec lgap-gray lgap-section-anchor" id="program">
         <div className="lgap-wrap">
-          <SectionHead eyebrow="Difference" title="1on1・研修との、決定的な違い" lead="1on1や研修は「手段」です。先に決めるべきは、何を変えるかという論点。リーダーズGAPは、その論点を特定するための診断です。" />
-          <div className="lgap-table-wrap">
-            <table className="lgap-diff-table">
-              <thead>
-                <tr><th></th><th>1on1・コーチング</th><th>研修プログラム</th><th>リーダーズGAP</th></tr>
-              </thead>
-              <tbody>
-                <tr><td>起点</td><td>個人の悩みや課題に依存</td><td>階層ごとに一律カリキュラム</td><td>全体調査で特定した「GAP」=課題の本質</td></tr>
-                <tr><td>何を決めるか</td><td>個人との対話で決定</td><td>受講を通じた課題の認識</td><td>組織に根付くGAPを解消する行動計画・施策・指標</td></tr>
-                <tr><td>提供価値</td><td>本人の内省・スタンス教育</td><td>知識や技術のインストール</td><td>組織単位での改善と実行</td></tr>
-                <tr><td>継続性・成果</td><td>本人の行動に依存</td><td>徹底は個人に依存</td><td>旗振り・定点観測を伴走</td></tr>
-              </tbody>
-            </table>
-          </div>
+          <SectionHead eyebrow="Program" title="6か月で、ずれを組織のルールに変える" />
+          <div className="lgap-program-grid">{programSteps.map((step) => <article key={step.label}><span>{step.label}</span><h3>{step.title}</h3><p>{step.body}</p></article>)}</div>
+          <div className="lgap-program-metrics"><h3>変化は、この数字で確かめます</h3><ul><li>認識のずれ（始めと終わりの診断で比較）</li><li>任されたミッション・目標の達成状況</li><li>経営者が現場への指示に使う時間</li></ul></div>
         </div>
       </section>
 
-      <section className="lgap-sec">
+      <section className="lgap-sec lgap-section-anchor" id="case">
         <div className="lgap-wrap">
-          <SectionHead eyebrow="Process" title="進め方" lead="大きな仕組みや新しいツールを導入するのではなく、小さくても「実際に変わった」という実感をつくります。" />
-          <div className="lgap-proc">
-            {processSteps.map((step, index) => (
-              <div className="lgap-proc-step" key={step}>
-                <div className="lgap-proc-num">{index + 1}</div>
-                <h4>{step}</h4>
-              </div>
-            ))}
-          </div>
-          <div className="lgap-proc-note">診断結果は個人評価ではなく、経営側と現場側の認識差を確認するために使用します。</div>
+          <SectionHead eyebrow="Case" title="離職の原因が「3年目の主任・店長層」にあると特定" />
+          <div className="lgap-case-attributes" aria-label="事例の属性"><span>美容サロン</span><span>店舗業</span><span>都市部</span><span>社員数 50名</span><span>調査人数 20名</span></div>
+          <div className="lgap-case-grid"><CaseCard title="課題">若手の離職率が下がらない。人事は現場の本音を知りたかった</CaseCard><CaseCard title="分かったこと">若手はやりがいを感じていた一方、3年目の主任・店長クラスで意欲が大きく下がっていた</CaseCard><CaseCard title="打った手">全員面談、3年目層向けの育成、店舗への裁量の試験的な委譲、効果の計測の継続</CaseCard></div>
         </div>
       </section>
 
-      <section className="lgap-sec lgap-gray">
-        <div className="lgap-wrap">
-          <SectionHead eyebrow="Answer" title="部門ごとの、想定されるご懸念" lead="導入を検討される際、各部門から挙がりやすいご懸念に、あらかじめお答えします。" />
-          <div className="lgap-ans-list">
-            {answers.map((item) => (
-              <div className="lgap-ans-item" key={item.who}>
-                <div className="lgap-ans-who">{item.who}</div>
-                <div className="lgap-ans-body">
-                  <div className="lgap-q">{item.question}</div>
-                  <div className="lgap-a">{item.answer}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+      <section className="lgap-sec lgap-gray lgap-section-anchor" id="contact">
+        <div className="lgap-wrap"><SectionHead eyebrow="Contact" title="まずは30分、お話を伺います" lead="試算の結果をお持ちいただければ、貴社のどこから手をつけるかを一緒に考えます。" /><ContactForm /></div>
       </section>
 
-      <section className="lgap-sec">
-        <div className="lgap-wrap">
-          <SectionHead eyebrow="Case" title="離職の原因が「3年目の主任・店長層」にあると特定" lead="離職率の高止まりを課題に、経営陣と現場の認識差を可視化した事例です。" />
-          <div className="lgap-case-detail">
-            <div className="lgap-case-meta">
-              <MetaItem number="50名" label="正社員" />
-              <MetaItem number="都市部" label="商圏" />
-              <MetaItem number="20名" label="調査対象" />
-            </div>
-            <div className="lgap-case-cols">
-              <CaseBlock title="背景と課題">
-                離職率が年々高止まりし、特に女性比率の高い業界のため、新卒が入社後数年で退職・結婚後に復職せず退職するケースが続いていた。社内アンケートを行い労働環境の改善を進めていたが、効果は今ひとつの状態だった。
-              </CaseBlock>
-              <CaseBlock title="診断で分かったこと">
-                経営陣ならびに全店舗で約20名にインタビューと診断を実施。結果、経営陣が感じていた課題とは異なり、若手は業務にやりがいを感じており、むしろ長期的に働きたいという声が多かった。一方、3年目（主任・店長クラス）で大きくエンゲージメントが低下していることが判明。「自分がマネジメントになっても、若手への見せられ方が描けていない」という、長期を見越した若手育成の仕組みづくりが優先課題と分かった。
-              </CaseBlock>
-            </div>
-            <div className="lgap-issue-note lgap-case-insight"><strong>経営陣が想定していた課題と、実際の課題は違っていました。打ち手は、現場の研修だけでなく、経営陣との全員面談や店舗への権限委譲など、経営側の動きにも及びました。</strong></div>
-            <div className="lgap-case-actions">
-              <div className="lgap-ca-head">結果とアクション</div>
-              <div className="lgap-ca-grid">
-                {caseActions.map(([title, body]) => (
-                  <div className="lgap-ca-item" key={title}><b>{title}</b>{body}</div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="lgap-final" id="cta">
-        <div className="lgap-wrap">
-          <h2>まずは、自組織のGAPを<br />確かめてみてください</h2>
-          <p>「どこにズレがあるか分からない」段階でも大丈夫です。まずはご担当者お一人でデモ診断をお試しいただくか、現状をうかがいながら一緒に論点を整理します。</p>
-          <a href={demoAssessmentUrl} className="lgap-btn-primary">まずはデモ診断を試す</a>
-          <div className="lgap-sub">導入のご相談も無料で承っています</div>
-        </div>
-      </section>
-
-      <section className="lgap-sec lgap-gray" id="contact">
-        <div className="lgap-wrap">
-          <SectionHead eyebrow="Contact" title="無料相談・お問い合わせ" lead="「どこにズレがあるか分からない」段階でも大丈夫です。まずはお気軽にご相談ください。担当より折り返しご連絡します。" />
-          <ContactForm />
-        </div>
-      </section>
-
-      <footer className="lgap-footer">
-        <a href="https://www.t-rails.com/" target="_blank" rel="noreferrer">合同会社Two rails</a>
-        <span> ｜ リーダーズGAP診断</span>
-      </footer>
+      <footer className="lgap-footer"><a href="https://www.t-rails.com/" target="_blank" rel="noreferrer">合同会社Two rails</a><span> ｜ リーダーズGAP診断</span></footer>
     </main>
   );
 }
 
-function HeroRadarPreview() {
-  const centerX = 220;
-  const centerY = 126;
-  const radius = 78;
-  const axisCount = sampleReportThemes.length;
-  const point = (index: number, distance: number) => {
-    const angle = -Math.PI / 2 + (Math.PI * 2 * index) / axisCount;
-    return [centerX + Math.cos(angle) * distance, centerY + Math.sin(angle) * distance] as const;
-  };
-  const polygon = (scores: number[], scale = radius) => scores
-    .map((score, index) => point(index, (score / 5) * scale).join(","))
-    .join(" ");
-
-  return (
-    <div className="lgap-hero-radar" role="img" aria-label="経営側と現場側の8テーマ比較レーダーチャート例">
-      <svg viewBox="0 0 440 270" aria-hidden="true">
-        {[1, 2, 3, 4, 5].map((level) => (
-          <polygon className="lgap-radar-grid" key={level} points={polygon(Array(axisCount).fill(level), radius)} />
-        ))}
-        {sampleReportThemes.map((theme, index) => {
-          const [x, y] = point(index, radius);
-          const [labelX, labelY] = point(index, radius + 28);
-          const anchor = labelX < centerX - 8 ? "end" : labelX > centerX + 8 ? "start" : "middle";
-          return (
-            <g key={theme.key}>
-              <line className="lgap-radar-axis" x1={centerX} y1={centerY} x2={x} y2={y} />
-              <text className="lgap-radar-label" x={labelX} y={labelY + 3} textAnchor={anchor}>{theme.theme}</text>
-            </g>
-          );
-        })}
-        <polygon className="lgap-radar-executive" points={polygon(sampleReportThemes.map((row) => row.executiveScore))} />
-        <polygon className="lgap-radar-field" points={polygon(sampleReportThemes.map((row) => row.fieldScore))} />
-        {sampleReportThemes.map((row, index) => {
-          const [executiveX, executiveY] = point(index, (row.executiveScore / 5) * radius);
-          const [fieldX, fieldY] = point(index, (row.fieldScore / 5) * radius);
-          return <g key={row.key}><circle className="lgap-radar-executive-dot" cx={executiveX} cy={executiveY} r="2.6" /><circle className="lgap-radar-field-dot" cx={fieldX} cy={fieldY} r="2.6" /></g>;
-        })}
-        <g className="lgap-radar-legend">
-          <line x1="151" y1="252" x2="171" y2="252" className="lgap-radar-executive-line" /><text x="177" y="255">経営側</text>
-          <line x1="241" y1="252" x2="261" y2="252" className="lgap-radar-field-line" /><text x="267" y="255">現場側</text>
-        </g>
-      </svg>
-    </div>
-  );
-}
-function SectionHead({ eyebrow, title, lead }: { eyebrow: string; title: React.ReactNode; lead: string }) {
-  return (
-    <>
-      <div className="lgap-eyebrow">{eyebrow}</div>
-      <h2 className="lgap-sec-title">{title}</h2>
-      <p className="lgap-sec-lead">{lead}</p>
-    </>
-  );
+function SectionHead({ eyebrow, title, lead }: { eyebrow: string; title: React.ReactNode; lead?: string }) {
+  return <><div className="lgap-eyebrow">{eyebrow}</div><h2 className="lgap-sec-title">{title}</h2>{lead ? <p className="lgap-sec-lead">{lead}</p> : null}</>;
 }
 
-function AssessmentColumn({ title, badge, items, tone }: { title: string; badge?: string; items: string[]; tone: "old" | "new" }) {
-  return (
-    <div className={`lgap-vs-col lgap-vs-${tone}`}>
-      {badge ? <span className="lgap-vs-badge">{badge}</span> : null}
-      <h3>{title}</h3>
-      <ul>
-        {items.map((item) => <li key={item}>{item}</li>)}
-      </ul>
-    </div>
-  );
+function FeatureCard({ icon, number, title, children }: { icon: React.ReactNode; number: string; title: string; children: React.ReactNode }) {
+  return <article className="lgap-feature-card"><div className="lgap-feature-icon">{icon}<span>{number}</span></div><h3>{title}</h3><p>{children}</p></article>;
 }
 
-function MetaItem({ number, label }: { number: string; label: string }) {
-  return (
-    <div className="lgap-meta-item">
-      <div className="lgap-meta-num">{number}</div>
-      <div className="lgap-meta-lbl">{label}</div>
-    </div>
-  );
-}
-
-function CaseBlock({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <div className="lgap-case-block">
-      <h4>{title}</h4>
-      <p>{children}</p>
-    </div>
-  );
+function CaseCard({ title, children }: { title: string; children: React.ReactNode }) {
+  return <article className="lgap-case-card"><h3>{title}</h3><p>{children}</p></article>;
 }
