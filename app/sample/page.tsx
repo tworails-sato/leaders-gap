@@ -49,8 +49,8 @@ export default function SampleLandingPage() {
             <div className="lgap-tag">経営者・人事ご担当者の方へ</div>
             <h1>経営と現場が、<br />同じ方向を向ける組織へ。</h1>
             <p className="lgap-hero-copy">経営者の「任せ方」と現場の「受け方」。そのずれを診断で数字にし、組織のルールとして整えていく6か月のプログラムです。</p>
-            <div className="lgap-hero-actions"><a href="#simulation" className="lgap-btn-primary">貴社の数字で試算する</a><a href="#contact" className="lgap-btn-secondary">相談する</a></div>
-            <div className="lgap-hero-demo-link">実際の回答画面も確認できます。<Link href={demoAssessmentUrl}>デモ診断を試す（無料・約5分）</Link></div>
+            <div className="lgap-hero-actions"><a href={demoAssessmentUrl} className="lgap-btn-primary">デモ診断を試す（無料・約5分）</a></div>
+            <div className="lgap-hero-demo-link">導入効果を数字で確認したい方は、<Link href="#simulation">貴社の数字で試算できます</Link></div>
           </div>
 
           <aside className="lgap-hero-report" aria-label="フィードバックレポート例">
