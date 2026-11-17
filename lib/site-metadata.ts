@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const siteUrl = "https://gap.ceo-sherpa.com";
 
 export const defaultTitle =
-  "Leaders GAP｜経営と現場の“見えないGAP”を可視化する組織アセスメント";
+  "リーダーズGAP｜経営と現場の“見えないGAP”を可視化する組織アセスメント";
 
 export const defaultDescription =
   "経営と現場の“見えないGAP”を可視化する、組織向けアセスメント「リーダーズGAP」。上下×左右の認識ズレを、インタビューと診断で構造化します。";
@@ -15,7 +15,7 @@ const socialImage = {
   url: "/og-image.png",
   width: 1200,
   height: 630,
-  alt: "Leaders GAP - 経営と現場のGAPを可視化する"
+  alt: "リーダーズGAP - 経営と現場のGAPを可視化する"
 };
 
 export function createPageMetadata({
@@ -35,7 +35,7 @@ export function createPageMetadata({
     },
     openGraph: {
       type: "website",
-      siteName: "Leaders GAP",
+      siteName: "リーダーズGAP",
       title,
       description: socialDescription,
       url: path,

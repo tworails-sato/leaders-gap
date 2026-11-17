@@ -6,7 +6,7 @@ import { sampleFeedback, sampleLowGaps, sampleReportCompany, sampleReportThemes,
 import { createPageMetadata } from "@/lib/site-metadata";
 
 export const metadata: Metadata = createPageMetadata({
-  title: "フィードバックサンプル｜Leaders GAP",
+  title: "フィードバックサンプル｜リーダーズGAP",
   path: "/sample/report",
   description: "リーダーズGAP診断で確認できる分析結果とフィードバック内容のサンプルです。"
 });
@@ -16,7 +16,7 @@ export default function SampleReportPage() {
     <main className="sample-report-shell">
       <div className="sample-ribbon">フィードバックサンプル｜固定のデモデータです</div>
       <div className="sample-report-topbar sample-offset">
-        <Link className="brand" href="/sample">Leaders GAP</Link>
+        <Link className="brand" href="/sample">リーダーズGAP</Link>
         <nav><Link href="/sample/assessment">デモ診断を受ける</Link><Link href="/sample">サービス紹介</Link></nav>
       </div>
 
@@ -70,7 +70,7 @@ export default function SampleReportPage() {
           <div className="grid two"><ActionSection title="まず着手する短期施策" items={sampleFeedback.shortTerm} /><ActionSection title="仕組みにする中期施策" items={sampleFeedback.midTerm} /></div>
         </section>
 
-        <section className="sample-report-cta"><small>LEADERS GAP CONSULTATION</small><h2>貴社の場合、どこにGAPがありそうですか？</h2><p>対象人数や実施方法、フィードバックの進め方をご案内します。</p><Link className="button" href="/sample#contact">導入について相談する<ArrowRight size={18} /></Link></section>
+        <section className="sample-report-cta"><small>リーダーズGAP ご相談</small><h2>貴社の場合、どこにGAPがありそうですか？</h2><p>対象人数や実施方法、フィードバックの進め方をご案内します。</p><Link className="button" href="/sample#contact">導入について相談する<ArrowRight size={18} /></Link></section>
         <div className="sample-report-footer"><Link className="button secondary" href="/sample/assessment">デモ診断を受ける</Link><Link className="button secondary" href="/sample">紹介ページへ戻る</Link></div>
       </div>
     </main>

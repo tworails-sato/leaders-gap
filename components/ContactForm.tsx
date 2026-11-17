@@ -1,7 +1,7 @@
 "use client";
 
 import type React from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const subjects = [
   "プログラムの詳細や実績を知りたい",
@@ -15,6 +15,17 @@ type Status = "idle" | "sending" | "success" | "error";
 export function ContactForm() {
   const [status, setStatus] = useState<Status>("idle");
   const [message, setMessage] = useState("");
+  const [subject, setSubject] = useState("");
+
+  useEffect(() => {
+    function selectSubject(event: Event) {
+      const requestedSubject = (event as CustomEvent<string>).detail;
+      if (subjects.includes(requestedSubject)) setSubject(requestedSubject);
+    }
+
+    window.addEventListener("lgap:select-contact-subject", selectSubject);
+    return () => window.removeEventListener("lgap:select-contact-subject", selectSubject);
+  }, []);
 
   async function submitContact(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -34,6 +45,7 @@ export function ContactForm() {
       if (!response.ok) throw new Error("Failed to send contact form");
 
       form.reset();
+      setSubject("");
       setStatus("success");
       setMessage("お問い合わせありがとうございました。担当より折り返しご連絡します。");
     } catch {
@@ -64,7 +76,7 @@ export function ContactForm() {
       </div>
       <div className="lgap-frow">
         <label htmlFor="subject">ご用件 <span className="lgap-req">必須</span></label>
-        <select id="subject" name="subject" required defaultValue="">
+        <select id="subject" name="subject" required value={subject} onChange={(event) => setSubject(event.target.value)}>
           <option value="">選択してください</option>
           {subjects.map((subject) => <option value={subject} key={subject}>{subject}</option>)}
         </select>

@@ -1,13 +1,15 @@
 import Link from "next/link";
+import { ArrowLeftRight, CheckCircle2, Clock3 } from "lucide-react";
 import type { Metadata } from "next";
 import type React from "react";
 import { ContactForm } from "@/components/ContactForm";
+import { CostCalculator } from "@/components/CostCalculator";
 import { RadarComparisonChart } from "@/components/RadarComparisonChart";
 import { sampleFeedback, sampleReportThemes, sampleTopGaps } from "@/lib/sample-report";
 import { createPageMetadata } from "@/lib/site-metadata";
 
 export const metadata: Metadata = createPageMetadata({
-  title: "Leaders GAP｜経営と現場の“見えないGAP”を可視化する組織アセスメント｜デモ診断",
+  title: "リーダーズGAP｜経営と現場の“見えないGAP”を可視化する組織アセスメント｜デモ診断",
   path: "/sample"
 });
 
@@ -67,7 +69,7 @@ const commonInitiativeItems = [
 ];
 
 const mutualChangeItems = [
-  "社長・幹部・現場のすべてが対象",
+  "経営者・幹部・現場のすべてが対象",
   "経営側の「任せたつもり」も数字で見える",
   "経営側・現場側それぞれの打ち手を決め、実行まで伴走する"
 ];
@@ -123,7 +125,7 @@ export default function SampleLandingPage() {
         <div className="lgap-wrap lgap-hd">
           <div className="lgap-logo">
             <img src="/lgap-mark.png" alt="" aria-hidden="true" />
-            <span className="lgap-logo-text">Leaders<span>GAP</span></span>
+            <span className="lgap-logo-text">リーダーズ<span>GAP</span></span>
           </div>
           <a href="#contact" className="lgap-header-cta">無料相談</a>
         </div>
@@ -132,16 +134,16 @@ export default function SampleLandingPage() {
       <section className="lgap-hero">
         <div className="lgap-wrap lgap-hero-grid">
           <div className="lgap-hero-content">
-            <div className="lgap-tag">社長のための権限移譲プログラム｜リーダーズGAP</div>
+            <div className="lgap-tag">経営者・人事ご担当者の方へ</div>
             <h1>経営と現場が、<br />同じ方向を向ける組織へ。</h1>
             <p className="lgap-hero-copy">
-              <strong>リーダーズGAPは、経営と現場の「相互変革」を促すプログラムです。</strong>社長・幹部・現場の三方向から「任せたつもり」と「任されたつもり」のズレを測り、社員だけでなく、経営側の任せ方も一緒に見直します。
+              <strong>リーダーズGAPは、経営と現場の「相互変革」を促すプログラムです。</strong>経営者・幹部・現場の三方向から「任せたつもり」と「任されたつもり」のズレを測り、社員だけでなく、経営側の任せ方も一緒に見直します。
             </p>
             <div className="lgap-hero-actions">
               <a href={demoAssessmentUrl} className="lgap-btn-primary">デモ診断を試す（無料・約5分）</a>
               <a href="#contact" className="lgap-btn-secondary">権限移譲について相談する</a>
             </div>
-            <div className="lgap-sub">※ 社長お一人でも受検できます</div>
+            <div className="lgap-sub">※ 経営者お一人でも受検できます</div>
           </div>
 
           <aside className="lgap-hero-report" aria-label="フィードバックレポート例">
@@ -191,6 +193,13 @@ export default function SampleLandingPage() {
 
       <section className="lgap-sec lgap-gray">
         <div className="lgap-wrap">
+          <SectionHead eyebrow="Cost" title="管理職がうまく立ち上がらないと、いくら失うか" lead="貴社の数字を入れると、見えにくい損失を試算できます。" />
+          <CostCalculator />
+        </div>
+      </section>
+
+      <section className="lgap-sec">
+        <div className="lgap-wrap">
           <SectionHead eyebrow="Value" title="なぜ、リーダーズGAPで改善できるのか" lead="3つの構造的な課題に対し、「第三者からの可視化」という仕組みで、それぞれに応えます。" />
           <div className="lgap-pair">
             {valuePairs.map((pair, index) => (
@@ -207,6 +216,25 @@ export default function SampleLandingPage() {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="lgap-sec lgap-gray">
+        <div className="lgap-wrap">
+          <SectionHead eyebrow="Onboarding" title="新しく管理職を迎える会社の場合" lead="外から入った管理職の方は、経営者が何を任せたつもりで、どこまで自分で決めてよいのかが見えないまま走り出しがちです。リーダーズGAPでは、入社の段階で経営者と管理職の両方に診断を受けていただき、認識のずれを早いうちに埋めていきます。" />
+          <div className="lgap-onboarding-grid">
+            <article><CheckCircle2 aria-hidden="true" /><p>管理職が自分で決めてよい範囲がはっきりし、経営者への相談が「判断が必要なこと」だけになる</p></article>
+            <article><Clock3 aria-hidden="true" /><p>手戻りや手直しが減り、経営者が経営の仕事に時間を使える</p></article>
+            <article><ArrowLeftRight aria-hidden="true" /><p>現場が「経営者の指示」と「管理職の指示」の食い違いで迷わなくなる</p></article>
+          </div>
+          <div className="lgap-onboarding-metrics">
+            <h3>確かめる数字</h3>
+            <ul>
+              <li>経営者と管理職の認識のずれ（始めと終わりの診断で比較）</li>
+              <li>入社後3か月時点の目標達成状況</li>
+              <li>経営者が手戻り・手直し・やり取りに使う時間</li>
+            </ul>
           </div>
         </div>
       </section>
@@ -247,7 +275,7 @@ export default function SampleLandingPage() {
             </div>
           </div>
 
-          <div className="lgap-report-wrap">
+          <div className="lgap-report-wrap" id="sample-report">
             <div className="lgap-cap">▼ アウトプットイメージ（フィードバックレポート例）</div>
             <div className="lgap-report-frame">
               <RadarComparisonChart data={sampleReportThemes} executiveLabel="経営側" fieldLabel="現場側" />
@@ -270,7 +298,7 @@ export default function SampleLandingPage() {
           <div className="lgap-table-wrap">
             <table className="lgap-diff-table">
               <thead>
-                <tr><th></th><th>1on1・コーチング</th><th>研修プログラム</th><th>Leaders GAP</th></tr>
+                <tr><th></th><th>1on1・コーチング</th><th>研修プログラム</th><th>リーダーズGAP</th></tr>
               </thead>
               <tbody>
                 <tr><td>起点</td><td>個人の悩みや課題に依存</td><td>階層ごとに一律カリキュラム</td><td>全体調査で特定した「GAP」=課題の本質</td></tr>
@@ -317,7 +345,7 @@ export default function SampleLandingPage() {
 
       <section className="lgap-sec">
         <div className="lgap-wrap">
-          <SectionHead eyebrow="Case" title="実施事例：美容サロン（店舗業）" lead="離職率の高止まりを課題に、経営陣と現場の認識差を可視化した事例です。" />
+          <SectionHead eyebrow="Case" title="離職の原因が「3年目の主任・店長層」にあると特定" lead="離職率の高止まりを課題に、経営陣と現場の認識差を可視化した事例です。" />
           <div className="lgap-case-detail">
             <div className="lgap-case-meta">
               <MetaItem number="50名" label="正社員" />

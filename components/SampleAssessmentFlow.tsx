@@ -124,7 +124,7 @@ export function SampleAssessmentFlow() {
       <section className="sample-guide sample-offset">
         <SampleRibbon />
         <div className="sample-guide-copy">
-          <span className="sample-kicker">LEADERS GAP DEMO</span>
+          <span className="sample-kicker">リーダーズGAP デモ</span>
           <h2>組織の認識差を、<br />5分で見える形に。</h2>
           <p>8テーマ・全24問のデモ診断です。1名なら基準値との比較、2名なら同じ端末を順番に使って回答差を確認できます。</p>
           <div className="sample-guide-metrics" aria-label="デモ診断の概要">
@@ -202,7 +202,7 @@ export function SampleAssessmentFlow() {
       <SampleRibbon />
       <div className="assessment-intro">
         <div>
-          <span className="badge">LEADERS GAP ASSESSMENT</span>
+          <span className="badge">リーダーズGAP アセスメント</span>
           <h2>回答者{activeParticipant.id}のアセスメント</h2>
           <p>現在の状態に最も近いものを、直感的に1～5で選択してください。</p>
         </div>
@@ -343,7 +343,7 @@ function LiveComparisonReport({ participants, onReset }: { participants: Partici
 
       <section className="sample-report-section"><div className="sample-section-heading"><span>03</span><div><small>NEXT ACTION</small><h2>次の一歩の例</h2></div></div><div className="grid two"><BulletList title="短期施策" items={sampleFeedback.shortTerm} /><BulletList title="中期施策" items={sampleFeedback.midTerm} /></div></section>
 
-      <section className="sample-report-cta"><small>LEADERS GAP CONSULTATION</small><h2>この結果を、組織の対話につなげませんか？</h2><p>実際の組織での活用方法や、結果の読み解きについてご案内します。</p><Link className="button" href="/sample#contact">結果について相談する<ArrowRight size={18} /></Link></section>
+      <section className="sample-report-cta"><small>リーダーズGAP ご相談</small><h2>この結果を、組織の対話につなげませんか？</h2><p>実際の組織での活用方法や、結果の読み解きについてご案内します。</p><Link className="button" href="/sample#contact">結果について相談する<ArrowRight size={18} /></Link></section>
       <div className="nav sample-report-footer"><button className="secondary" type="button" onClick={onReset}>もう一度診断する</button><Link className="button secondary" href="/sample/report">フィードバックサンプルを見る</Link><Link className="button secondary" href="/sample">紹介ページへ戻る</Link></div>
     </section>
   );

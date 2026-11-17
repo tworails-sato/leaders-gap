@@ -5,7 +5,7 @@ import { SampleAssessmentFlow } from "@/components/SampleAssessmentFlow";
 import { createPageMetadata } from "@/lib/site-metadata";
 
 export const metadata: Metadata = createPageMetadata({
-  title: "デモ診断を体験｜Leaders GAP",
+  title: "デモ診断を体験｜リーダーズGAP",
   path: "/sample/assessment",
   description: "リーダーズGAP診断の8テーマ・全24問を、保存なしで約5分で体験できるデモ診断です。"
 });
