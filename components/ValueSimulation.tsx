@@ -58,7 +58,7 @@ export function ValueSimulation() {
   }
 
   return (
-    <div className="lgap-simulation-grid">
+    <div className="lgap-simulation-grid lgap-section-anchor" id="sim-input">
       <div className="lgap-simulation-inputs">
         <section className="lgap-simulation-card">
           <div className="lgap-simulation-step"><span>1</span><h3>貴社の現在</h3></div>
@@ -68,20 +68,20 @@ export function ValueSimulation() {
         </section>
 
         <section className="lgap-simulation-card">
-          <div className="lgap-simulation-step"><span>2</span><h3>社員1人あたり、週に何時間を「ずれ」に使っているか</h3></div>
+          <div className="lgap-simulation-step"><span>2</span><h3>社員1人あたり、週に何時間をGAPに使っているか</h3></div>
           <p className="lgap-simulation-help">感覚で結構です。週40時間として、働く時間に占める割合に換算します。</p>
           <GapSlider label="手戻り・やり直し" help="指示と成果物が合わず、作り直している時間" value={rework} onChange={setRework} />
           <GapSlider label="認識違いによる確認の往復" help="「そういう意味じゃない」の確認や、行き違いの調整にかかる時間" value={confirmation} onChange={setConfirmation} />
           <GapSlider label="離職・欠員による穴埋め" help="辞めた人の仕事の肩代わりや、新しい人が立ち上がるまでの時間" value={vacancy} onChange={setVacancy} />
-          <div className="lgap-gap-total">合計：働く時間の <strong>{decimal(result.gapRate)}%</strong>（週{decimal(result.gapHours)}時間）が「ずれ」に使われている</div>
+          <div className="lgap-gap-total">合計：働く時間の <strong>{decimal(result.gapRate)}%</strong>（週{decimal(result.gapHours)}時間）がGAPに使われている</div>
         </section>
       </div>
 
       <div className="lgap-simulation-output">
         <section className="lgap-simulation-card">
-          <div className="lgap-simulation-step"><span>3</span><h3>その「ずれ」を何割減らせたら？</h3></div>
+          <div className="lgap-simulation-step"><span>3</span><h3>そのGAPを何割減らせたら？</h3></div>
           <div className="lgap-reduction-value"><strong>{reduction}</strong><span>割</span></div>
-          <input className="lgap-range" type="range" min="0" max="10" step="1" value={reduction} onChange={(event) => setReduction(Number(event.target.value))} aria-label="ずれを減らす割合" />
+          <input className="lgap-range" type="range" min="0" max="10" step="1" value={reduction} onChange={(event) => setReduction(Number(event.target.value))} aria-label="GAPを減らす割合" />
           <div className="lgap-range-scale"><span>0割</span><span>5割</span><span>10割</span></div>
           <p className="lgap-improvement-points">→ 働く時間の <strong>{decimal(result.improvementPoints)}ポイント</strong> が、価値を生む仕事に戻る</p>
         </section>
@@ -89,7 +89,7 @@ export function ValueSimulation() {
         <article className="lgap-created-value" aria-live="polite"><span>創出できる付加価値（年間の粗利）</span><strong>＋{money(result.createdValue)}<small>万円</small></strong><p>年間粗利 {money(result.gross)}万円 × {decimal(result.improvementPoints)}%</p></article>
         <article className="lgap-people-equivalent"><span>人に置き換えると</span><strong>{decimal(result.peopleEquivalent)}<small>人分の働きが生まれる</small></strong><p>採用せずに、いまのメンバーで生み出せる分です</p></article>
 
-        <div className="lgap-simulation-cta"><p>リーダーズGAPは、この「ずれ」がどこで起きているかを診断で数字にし、組織のルールとして減らしていくプログラムです。</p><button type="button" className="lgap-btn-primary" onClick={moveToContact}>この試算をもとに相談する</button></div>
+        <div className="lgap-simulation-cta"><p>リーダーズGAPは、このGAPがどこで起きているかを診断で数字にし、組織のルールとして減らしていくプログラムです。</p><button type="button" className="lgap-btn-primary" onClick={moveToContact}>この試算をもとに相談する</button></div>
         <div className="lgap-simulation-notes"><p>※入力された数字と、3で選んだ減らし方の仮定にもとづく単純化した試算です（1人あたり付加価値が変わらず、戻った時間がそのまま粗利を生む仮定）。効果を保証するものではありません。</p><p>※初期値は入力例です。</p></div>
       </div>
     </div>

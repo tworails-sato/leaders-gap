@@ -4204,6 +4204,160 @@ th {
   max-width: 1060px;
 }
 
+.lgap-gap-profit-intro {
+  background: #fff;
+  border: 1px solid var(--lgap-line);
+  border-radius: 10px;
+  box-shadow: 0 18px 50px rgba(30, 58, 95, 0.08);
+  margin: 0 auto 36px;
+  max-width: 1060px;
+  padding: 34px 38px;
+}
+
+.lgap-gap-profit-intro > h3 {
+  color: var(--lgap-navy);
+  font-size: 1.65rem;
+  line-height: 1.5;
+  margin: 0;
+  text-align: center;
+}
+
+.lgap-gap-profit-example {
+  color: var(--lgap-sub);
+  font-size: 0.88rem;
+  margin: 5px 0 28px;
+  text-align: center;
+}
+
+.lgap-profit-block + .lgap-profit-block {
+  margin-top: 28px;
+}
+
+.lgap-profit-block h4 {
+  color: var(--lgap-navy);
+  font-size: 1rem;
+  margin: 0 0 10px;
+}
+
+.lgap-profit-bar {
+  display: grid;
+  height: 64px;
+  overflow: hidden;
+}
+
+.lgap-profit-sales {
+  grid-template-columns: 3fr 2fr;
+}
+
+.lgap-profit-destination {
+  grid-template-columns: minmax(0, 84fr) 56px minmax(0, 15fr);
+}
+
+.lgap-profit-bar > div {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  padding: 5px 9px;
+  text-align: center;
+}
+
+.lgap-profit-bar span,
+.lgap-profit-bar b {
+  display: block;
+  line-height: 1.35;
+}
+
+.lgap-profit-bar span {
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.lgap-profit-bar b {
+  font-size: 0.75rem;
+  margin-top: 3px;
+}
+
+.lgap-profit-purchase {
+  background: #d6dee8;
+  color: var(--lgap-navy);
+}
+
+.lgap-profit-gross {
+  background: #1f3a5f;
+  color: #fff;
+}
+
+.lgap-profit-cost {
+  background: #7a8594;
+  color: #fff;
+}
+
+.lgap-profit-gap {
+  background: #b8232a;
+  color: #fff;
+}
+
+.lgap-profit-income {
+  background: #2e86b8;
+  color: #fff;
+}
+
+.lgap-profit-block > p {
+  color: var(--lgap-sub);
+  font-size: 0.78rem;
+  line-height: 1.7;
+  margin: 8px 0 0;
+}
+
+.lgap-profit-highlight {
+  background: #fff3f4;
+  border-left: 4px solid #b8232a;
+  color: var(--lgap-navy);
+  font-size: 1.02rem;
+  font-weight: 700;
+  line-height: 1.8;
+  margin: 28px 0 20px;
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.lgap-profit-highlight strong {
+  color: #b8232a;
+  font-size: 1.22rem;
+  margin: 0 3px;
+}
+
+.lgap-sim-intro-button {
+  align-items: center;
+  background: var(--lgap-navy);
+  border-radius: 6px;
+  color: #fff;
+  display: flex;
+  font-size: 0.98rem;
+  font-weight: 700;
+  justify-content: center;
+  margin: 0 auto;
+  max-width: 380px;
+  min-height: 50px;
+  padding: 11px 20px;
+  text-align: center;
+  text-decoration: none;
+}
+
+.lgap-sim-intro-button:hover {
+  background: #142c4b;
+}
+
+.lgap-profit-note {
+  color: var(--lgap-sub);
+  font-size: 0.72rem;
+  line-height: 1.65;
+  margin: 14px 0 0;
+  text-align: center;
+}
+
 .lgap-simulation-inputs,
 .lgap-simulation-output {
   display: flex;
@@ -4705,6 +4859,47 @@ th {
   padding: 5px 13px;
 }
 
+.lgap-floating-simulation {
+  align-items: center;
+  background: #b8232a;
+  border-radius: 8px;
+  bottom: 20px;
+  box-shadow: 0 12px 30px rgba(92, 20, 25, 0.3);
+  color: #fff;
+  display: flex;
+  font-size: 0.9rem;
+  font-weight: 800;
+  gap: 8px;
+  min-height: 50px;
+  opacity: 0;
+  padding: 11px 17px;
+  pointer-events: none;
+  position: fixed;
+  right: 20px;
+  text-decoration: none;
+  transform: translateY(18px);
+  transition: opacity 180ms ease, transform 180ms ease, background 150ms ease;
+  visibility: hidden;
+  z-index: 45;
+}
+
+.lgap-floating-simulation.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+  visibility: visible;
+}
+
+.lgap-floating-simulation:hover {
+  background: #981d23;
+}
+
+.lgap-floating-simulation svg {
+  flex: 0 0 auto;
+  height: 20px;
+  width: 20px;
+}
+
 @media (max-width: 860px) {
   .lgap-simulation-grid {
     grid-template-columns: 1fr;
@@ -4730,8 +4925,30 @@ th {
   .lgap-simulation-card,
   .lgap-created-value,
   .lgap-people-equivalent,
-  .lgap-feature-report {
+  .lgap-feature-report,
+  .lgap-gap-profit-intro {
     padding: 20px 16px;
+  }
+
+  .lgap-gap-profit-intro > h3 {
+    font-size: 1.3rem;
+  }
+
+  .lgap-profit-destination {
+    grid-template-columns: minmax(0, 1fr) 56px 64px;
+  }
+
+  .lgap-profit-bar b {
+    display: none;
+  }
+
+  .lgap-profit-bar span {
+    font-size: 0.72rem;
+  }
+
+  .lgap-profit-highlight {
+    font-size: 0.9rem;
+    padding: 14px;
   }
 
   .lgap-simulation-number {
@@ -4769,6 +4986,14 @@ th {
 
   .lgap-case-attributes {
     justify-content: flex-start;
+  }
+
+  .lgap-floating-simulation {
+    bottom: 16px;
+    font-size: 0.8rem;
+    min-height: 48px;
+    padding: 10px 13px;
+    right: 16px;
   }
 }
 .sample-count-limit {
