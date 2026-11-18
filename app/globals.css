@@ -4250,7 +4250,7 @@ th {
 }
 
 .lgap-profit-destination {
-  grid-template-columns: minmax(0, 84fr) 56px minmax(0, 15fr);
+  grid-template-columns: minmax(0, 85fr) minmax(72px, 15fr);
 }
 
 .lgap-profit-bar > div {
@@ -4292,6 +4292,24 @@ th {
 .lgap-profit-cost {
   background: #7a8594;
   color: #fff;
+}
+
+.lgap-profit-cost-total {
+  align-items: stretch !important;
+  background: #7a8594;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 76px;
+  justify-content: stretch !important;
+  padding: 0 !important;
+}
+
+.lgap-profit-cost-total > div {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  padding: 5px 8px;
 }
 
 .lgap-profit-gap {
@@ -4935,7 +4953,11 @@ th {
   }
 
   .lgap-profit-destination {
-    grid-template-columns: minmax(0, 1fr) 56px 64px;
+    grid-template-columns: minmax(0, 1fr) 64px;
+  }
+
+  .lgap-profit-cost-total {
+    grid-template-columns: minmax(0, 1fr) 64px;
   }
 
   .lgap-profit-bar b {

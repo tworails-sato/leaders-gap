@@ -186,13 +186,15 @@ function GapProfitIntro() {
       </div>
 
       <div className="lgap-profit-block">
-        <h4>② 粗利の行き先（粗利2億円の内訳）</h4>
+        <h4>② 粗利と営業利益の関係</h4>
         <div className="lgap-profit-bar lgap-profit-destination">
-          <div className="lgap-profit-cost"><span>人件費・経費</span><b>1億6,800万円</b></div>
-          <div className="lgap-profit-gap"><span>GAP</span></div>
+          <div className="lgap-profit-cost-total">
+            <div className="lgap-profit-cost"><span>人件費・経費</span><b>1億6,800万円</b></div>
+            <div className="lgap-profit-gap"><span>うちGAP</span><b>200万円</b></div>
+          </div>
           <div className="lgap-profit-income"><span>営業利益</span><b>3,000万円</b></div>
         </div>
-        <p>粗利のうち、どれだけが営業利益として残るかは、日々のオペレーションで決まります。手戻りや確認の往復（GAP）に使われた人件費は、価値を生まないまま消えていきます。</p>
+        <p>粗利のうち、どれだけが営業利益として残るかは、日々のオペレーションで決まります。GAPは新たな費用ではなく、人件費・経費の中で価値を生まないまま消えている時間です。</p>
       </div>
 
       <p className="lgap-profit-highlight">働く時間のたった1%（1人あたり週24分）がGAPに使われているだけで、<strong>年間200万円</strong>。営業利益3,000万円の会社なら、その<strong>約7%</strong>にあたります。</p>
