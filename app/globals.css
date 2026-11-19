@@ -3913,6 +3913,11 @@ th {
   white-space: normal;
 }
 
+.lgap-hero-marker {
+  box-shadow: inset 0 -0.28em 0 rgba(232, 55, 76, 0.24);
+  padding: 0 0.04em;
+}
+
 .lgap-hero-content .lgap-hero-copy {
   max-width: 680px;
 }
@@ -4331,6 +4336,83 @@ th {
   font-size: 0.78rem;
   line-height: 1.7;
   margin: 8px 0 0;
+}
+
+.lgap-profit-derivation {
+  background: #eef7fc;
+  border: 1px solid #bdddec;
+  margin: 28px 0 18px;
+  padding: 20px 22px 22px;
+}
+
+.lgap-profit-derivation > p {
+  color: var(--lgap-sub);
+  font-size: 0.82rem;
+  line-height: 1.75;
+  margin: 0 0 16px;
+}
+
+.lgap-profit-derivation > p strong {
+  color: var(--lgap-navy);
+  display: block;
+  font-size: 0.92rem;
+  margin-bottom: 4px;
+}
+
+.lgap-profit-equation {
+  align-items: stretch;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1.22fr);
+}
+
+.lgap-profit-equation > div {
+  align-items: center;
+  background: #fff;
+  border: 1px solid #cbdde8;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 88px;
+  padding: 10px 8px;
+  text-align: center;
+}
+
+.lgap-profit-equation > i {
+  align-items: center;
+  color: var(--lgap-blue-dk);
+  display: flex;
+  font-size: 1.35rem;
+  font-style: normal;
+  font-weight: 800;
+}
+
+.lgap-profit-equation span {
+  color: var(--lgap-sub);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.lgap-profit-equation b {
+  color: var(--lgap-navy);
+  font-size: 1.22rem;
+  line-height: 1.4;
+  margin-top: 2px;
+}
+
+.lgap-profit-equation small {
+  color: var(--lgap-sub);
+  font-size: 0.65rem;
+  margin-top: 2px;
+}
+
+.lgap-profit-equation .lgap-profit-equation-result {
+  background: #fff3f4;
+  border-color: #e7aeb4;
+}
+
+.lgap-profit-equation-result b {
+  color: #b8232a;
 }
 
 .lgap-profit-highlight {
@@ -5352,6 +5434,24 @@ th {
   .lgap-profit-highlight {
     font-size: 0.9rem;
     padding: 14px;
+  }
+
+  .lgap-profit-derivation {
+    padding: 18px 14px;
+  }
+
+  .lgap-profit-equation {
+    grid-template-columns: 1fr;
+  }
+
+  .lgap-profit-equation > div {
+    min-height: 76px;
+  }
+
+  .lgap-profit-equation > i {
+    justify-content: center;
+    line-height: 1;
+    min-height: 14px;
   }
 
   .lgap-simulation-number {

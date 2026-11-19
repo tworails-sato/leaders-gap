@@ -43,8 +43,8 @@ export default function SampleLandingPage() {
       <section className="lgap-hero lgap-section-anchor" id="top">
         <div className="lgap-wrap lgap-hero-grid">
           <div className="lgap-hero-content">
-            <div className="lgap-tag">経営者・人事ご担当者の方へ</div>
-            <h1>組織のGAPを埋めて、<br />利益を底上げできる<br />組織へ。</h1>
+            <div className="lgap-tag">経営者・人事責任者の方へ</div>
+            <h1>組織のGAPを埋めて、<br /><span className="lgap-hero-marker">利益を底上げ</span>できる<br />組織へ。</h1>
             <p className="lgap-hero-copy">経営側と現場の認識の差を明らかにし、<br className="lgap-pc-break" />組織全体の相互変革を実践することで<br className="lgap-pc-break" />利益体質の組織をつくる6か月のプログラムです。</p>
             <div className="lgap-hero-actions"><a href={demoAssessmentUrl} className="lgap-btn-primary">デモ診断を試す（無料・約5分）</a></div>
             <div className="lgap-hero-demo-link">導入効果を数字で確認したい方は、<Link href="#simulation">貴社の数字で試算できます</Link></div>
@@ -222,10 +222,21 @@ function GapProfitIntro() {
           </div>
           <div className="lgap-profit-income"><span>営業利益</span><b>3,000万円</b></div>
         </div>
-        <p>粗利のうち、どれだけが営業利益として残るかは、日々のオペレーションで決まります。GAPは新たな費用ではなく、人件費・経費の中で価値を生まないまま消えている時間です。</p>
+        <p>粗利の多くは、人件費や事業を動かすための経費に使われます。GAPは新たに発生する費用ではなく、その中に含まれる手戻りや確認の往復など、価値を生まないまま消えている時間です。</p>
       </div>
 
-      <p className="lgap-profit-highlight">働く時間のたった1%（1人あたり週24分）がGAPに使われているだけで、<strong>年間200万円</strong>。営業利益3,000万円の会社なら、その<strong>約7%</strong>にあたります。</p>
+      <div className="lgap-profit-derivation">
+        <p><strong>「年間200万円」の計算根拠</strong>この会社では、社員30名の働きが年間2億円の粗利を生み出しています。現在と同じ生産性で考えると、働く時間の1%がコミュニケーションのGAPに消えるだけで、次の付加価値を生み出せない計算です。</p>
+        <div className="lgap-profit-equation" aria-label="粗利2億円かけるGAP1パーセントは年間200万円">
+          <div><span>組織が生む粗利</span><b>2億円</b></div>
+          <i aria-hidden="true">×</i>
+          <div><span>GAPに使われる時間</span><b>1%</b><small>1人あたり週24分</small></div>
+          <i aria-hidden="true">＝</i>
+          <div className="lgap-profit-equation-result"><span>生み出せない付加価値</span><b>年間200万円</b></div>
+        </div>
+      </div>
+
+      <p className="lgap-profit-highlight">1人あたりでは週24分でも、30名分が1年間積み重なると<strong>年間200万円</strong>。営業利益3,000万円の会社なら、その<strong>約7%</strong>にあたります。</p>
       <a className="lgap-sim-intro-button" href="#sim-input">貴社の数字でシミュレーションしてみる ↓</a>
       <p className="lgap-profit-note">※数値はすべて説明のための例です。生産性は一般に、付加価値（粗利）÷社員数で測ります。1% ＝ 週40時間 × 1% ＝ 24分。</p>
     </section>
