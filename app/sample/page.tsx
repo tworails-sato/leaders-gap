@@ -17,9 +17,9 @@ export const metadata: Metadata = createPageMetadata({
 const demoAssessmentUrl = "https://gap.ceo-sherpa.com/sample/assessment";
 
 const issues = [
-  { icon: ArrowLeftRight, title: "「伝えたこと」と「伝わったこと」が違う", body: "指示と成果物がずれることで、やり直しや巻き直し、ダブルチェックなどの往復が続く。" },
-  { icon: UserRoundCog, title: "「自分がやった方が早い」となる管理職", body: "「自分がやったほうが早い」と、リーダー層が仕事を抱え込み、メンバー以上に疲弊する。" },
-  { icon: RotateCcw, title: "「決まったはずのこと」が定着しない", body: "目的や背景も伝えて設定や導入をしたはずなのに、いつのまにか元に戻ってしまう。" }
+  { icon: ArrowLeftRight, title: ["「伝えたこと」と", "「伝わったこと」が違う"], body: "指示と成果物がずれることで、やり直しや巻き直し、ダブルチェックなどの往復が続く。" },
+  { icon: UserRoundCog, title: ["「自分がやった方が早い」", "となる管理職"], body: "「自分がやったほうが早い」と、リーダー層が仕事を抱え込み、メンバー以上に疲弊する。" },
+  { icon: RotateCcw, title: ["「決まったはずのこと」が", "定着しない"], body: "目的や背景も伝えて設定や導入をしたはずなのに、いつのまにか元に戻ってしまう。" }
 ];
 
 const programRows = [
@@ -44,7 +44,7 @@ export default function SampleLandingPage() {
         <div className="lgap-wrap lgap-hero-grid">
           <div className="lgap-hero-content">
             <div className="lgap-tag">経営者・人事ご担当者の方へ</div>
-            <h1>組織のGAPを埋めて、<br />利益を底上げできる組織へ。</h1>
+            <h1>組織のGAPを埋めて、<br />利益を底上げできる<br />組織へ。</h1>
             <p className="lgap-hero-copy">経営側と現場の認識の差を明らかにし、<br className="lgap-pc-break" />組織全体の相互変革を実践することで<br className="lgap-pc-break" />利益体質の組織をつくる6か月のプログラムです。</p>
             <div className="lgap-hero-actions"><a href={demoAssessmentUrl} className="lgap-btn-primary">デモ診断を試す（無料・約5分）</a></div>
             <div className="lgap-hero-demo-link">導入効果を数字で確認したい方は、<Link href="#simulation">貴社の数字で試算できます</Link></div>
@@ -72,7 +72,7 @@ export default function SampleLandingPage() {
           <div className="lgap-issue-grid">
             {issues.map((issue, index) => {
               const Icon = issue.icon;
-              return <article className="lgap-issue-card" key={issue.title}><div className="lgap-issue-card-head"><div className="lgap-issue-icon"><Icon aria-hidden="true" /></div><div className="lgap-issue-num">{String(index + 1).padStart(2, "0")}</div></div><h3>{issue.title}</h3><p>{issue.body}</p></article>;
+              return <article className="lgap-issue-card" key={issue.title.join("")}><div className="lgap-issue-card-head"><div className="lgap-issue-icon"><Icon aria-hidden="true" /></div><div className="lgap-issue-num">{String(index + 1).padStart(2, "0")}</div></div><h3>{issue.title[0]}<br />{issue.title[1]}</h3><p>{issue.body}</p></article>;
             })}
           </div>
           <div className="lgap-issue-note">これらは「特定の誰かのせい」ではなく、組織が大きくなるときに、<br className="lgap-pc-break" />必ず発生してくる<b>「認識の差＝GAP」</b>を放置してしまうことが原因です。</div>
@@ -114,7 +114,7 @@ export default function SampleLandingPage() {
 
       <section className="lgap-sec lgap-gray lgap-section-anchor" id="sample-report">
         <div className="lgap-wrap">
-          <SectionHead eyebrow="Sample" title="アセスメントとインタビューをもとに「GAPが起きやすいポイント」の差分を可視化します。" />
+          <SectionHead eyebrow="Sample" title="組織のGAPを、8つのテーマで可視化" lead="アセスメントとインタビューをもとに、経営側と現場側でGAPが起きやすいポイントを明らかにします。" />
           <div className="lgap-sample-comparison">
             <div className="lgap-sample-radar-panel"><div className="lgap-sample-label">フィードバックレポート例</div><HeroRadarPreview /></div>
             <div className="lgap-theme-comparison"><div className="lgap-theme-comparison-head"><span>8テーマ別比較</span><b>経営側</b><b>現場側</b><b>GAP</b></div>{sampleReportThemes.map((row) => <div className="lgap-theme-comparison-row" key={row.key}><span>{row.theme}</span><b>{row.executiveScore.toFixed(2)}</b><b>{row.fieldScore.toFixed(2)}</b><strong>+{row.gap?.toFixed(2)}</strong></div>)}</div>
@@ -137,10 +137,11 @@ export default function SampleLandingPage() {
 
       <section className="lgap-sec lgap-section-anchor" id="case">
         <div className="lgap-wrap">
-          <SectionHead eyebrow="Case" title="離職の原因が「3年目の主任・店長層」にあると特定" />
+          <SectionHead eyebrow="Case Study" title="導入事例：美容サロン運営会社" lead="都市部で複数店舗を展開する、社員数50名の美容サロン運営会社。若手社員の離職率が下がらず、社内アンケートや労働環境の改善を続けても成果が見えないことが課題でした。" />
           <div className="lgap-case-attributes" aria-label="事例の属性"><span>美容サロン</span><span>店舗業</span><span>都市部</span><span>社員数 50名</span><span>調査人数 20名</span></div>
+          <div className="lgap-case-finding"><span>診断・インタビューで特定した優先課題</span><h3>離職の原因は「3年目の主任・店長層」にあった</h3><p>若手社員そのものではなく、主任・店長へ役割が変わる時期の育成と権限設計に、優先して取り組む必要があると分かりました。</p></div>
           <div className="lgap-case-detail">
-            <div className="lgap-case-story"><h3>背景と診断で分かったこと</h3><p>若手の離職率が下がらず、社内アンケートや労働環境の改善を続けても効果が見えない状態でした。経営陣と全店舗の約20名へ診断・インタビューを実施すると、若手は仕事にやりがいを感じている一方、3年目の主任・店長層で意欲が大きく低下していることが判明。長期を見越した育成と権限設計が、本当の優先課題だと分かりました。</p></div>
+            <div className="lgap-case-story"><h3>診断で分かったこと</h3><p>経営陣と全店舗の約20名へ診断・インタビューを実施すると、若手は仕事にやりがいを感じ、長く働きたいと考えている一方、3年目の主任・店長層で意欲が大きく低下していることが判明しました。経営側が想定していた「若手の労働環境」と、現場で実際に起きていた課題が異なっていました。</p></div>
             <div className="lgap-case-ba">
               <div className="lgap-case-before"><span>BEFORE</span><h3>離職の原因が見えず、施策が空振り</h3><p>若手の労働環境を中心に改善していたが、離職率は高止まり。経営が想定する課題と現場の実感がずれていました。</p></div>
               <div className="lgap-case-arrow" aria-hidden="true">→</div>
