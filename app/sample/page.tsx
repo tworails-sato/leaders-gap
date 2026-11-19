@@ -5,7 +5,7 @@ import type React from "react";
 import { ContactForm } from "@/components/ContactForm";
 import { FloatingSimulationButton } from "@/components/FloatingSimulationButton";
 import { ValueSimulation } from "@/components/ValueSimulation";
-import { sampleFeedback, sampleReportThemes, sampleTopGaps } from "@/lib/sample-report";
+import { sampleReportThemes, sampleTopGaps } from "@/lib/sample-report";
 import { createPageMetadata } from "@/lib/site-metadata";
 
 export const metadata: Metadata = createPageMetadata({
@@ -44,7 +44,7 @@ export default function SampleLandingPage() {
         <div className="lgap-wrap lgap-hero-grid">
           <div className="lgap-hero-content">
             <div className="lgap-tag">経営者・人事責任者の方へ</div>
-            <h1>組織のGAPを埋めて、<br /><span className="lgap-hero-marker">利益を底上げ</span>できる<br />組織へ。</h1>
+            <h1><span className="lgap-hero-heading-line">組織のGAPを埋めて、</span><span className="lgap-hero-heading-line"><span className="lgap-hero-marker">利益を底上げ</span>できる</span><span className="lgap-hero-heading-line">組織へ。</span></h1>
             <p className="lgap-hero-copy">経営側と現場の認識の差を明らかにし、<br className="lgap-pc-break" />組織全体の相互変革を実践することで<br className="lgap-pc-break" />利益体質の組織をつくる6か月のプログラムです。</p>
             <div className="lgap-hero-actions"><a href={demoAssessmentUrl} className="lgap-btn-primary">デモ診断を試す（無料・約5分）</a></div>
             <div className="lgap-hero-demo-link">導入効果を数字で確認したい方は、<Link href="#simulation">貴社の数字で試算できます</Link></div>
@@ -60,7 +60,6 @@ export default function SampleLandingPage() {
               <span>最大GAP 上位3</span>
               {sampleTopGaps.map((row, index) => <div key={row.key}><b>0{index + 1}</b><p>{row.theme}</p><strong>+{row.gap?.toFixed(2)}</strong></div>)}
             </div>
-            <p className="lgap-hero-report-summary">{sampleFeedback.summary.split("\n\n")[0]}</p>
             <Link href="/sample/report" className="lgap-hero-report-link">フィードバック全体を見る <span>→</span></Link>
           </aside>
         </div>
@@ -88,11 +87,11 @@ export default function SampleLandingPage() {
 
       <section className="lgap-sec lgap-section-anchor" id="feature">
         <div className="lgap-wrap">
-          <SectionHead eyebrow="Feature" title="リーダーズGAPは、組織全体のアップデートプログラムです" />
+          <SectionHead eyebrow="Feature" title="リーダーズGAPは「組織全体の判断基準をつくる」プログラムです。" />
           <div className="lgap-feature-grid">
-            <FeatureCard icon={<RefreshCw aria-hidden="true" />} number="01" title="相互変革">研修や1on1は、受けた人しか変わりません。リーダーズGAPは経営者の任せ方・決め方も見直すので、組織が元に戻りにくくなります</FeatureCard>
-            <FeatureCard icon={<MessageCircle aria-hidden="true" />} number="02" title="社外の第三者だから、本音が集まる">社内の人が聞いても出てこない声を、利害のない立場で集め、経営に届けます</FeatureCard>
-            <FeatureCard icon={<Network aria-hidden="true" />} number="03" title="階層と部門をまたいで見る">経営と現場の上下だけでなく、部門どうしの左右のGAPも、同じ物差しで測ります</FeatureCard>
+            <FeatureCard visual="mutual" number="01" title="相互変革">研修や1on1は、受けた人しか変わりません。リーダーズGAPは経営者の任せ方・決め方も見直すので、組織が元に戻りにくくなります</FeatureCard>
+            <FeatureCard visual="voice" number="02" title="社外の第三者だから、本音が集まる">社内の人が聞いても出てこない声を、利害のない立場で集め、経営に届けます</FeatureCard>
+            <FeatureCard visual="network" number="03" title="階層と部門をまたいで見る">経営と現場の上下だけでなく、部門どうしの左右のGAPも、同じ物差しで測ります</FeatureCard>
           </div>
           <div className="lgap-comparison-block">
             <h3>一般的な研修・コーチングとの違い</h3>
@@ -246,8 +245,35 @@ function SectionHead({ eyebrow, title, lead }: { eyebrow: string; title: React.R
   return <><div className="lgap-eyebrow">{eyebrow}</div><h2 className="lgap-sec-title">{title}</h2>{lead ? <p className="lgap-sec-lead">{lead}</p> : null}</>;
 }
 
-function FeatureCard({ icon, number, title, children }: { icon: React.ReactNode; number: string; title: string; children: React.ReactNode }) {
-  return <article className="lgap-feature-card"><div className="lgap-feature-icon">{icon}<span>{number}</span></div><h3>{title}</h3><p>{children}</p></article>;
+function FeatureCard({ visual, number, title, children }: { visual: string; number: string; title: string; children: React.ReactNode }) {
+  return <article className="lgap-feature-card"><FeatureIllustration type={visual} number={number} /><h3>{title}</h3><p>{children}</p></article>;
+}
+
+function FeatureIllustration({ type, number }: { type: string; number: string }) {
+  return (
+    <div className={`lgap-feature-visual lgap-feature-visual-${type}`} aria-hidden="true">
+      <span className="lgap-feature-visual-number">{number}</span>
+      {type === "mutual" ? <>
+        <div className="lgap-feature-party lgap-feature-party-management">経営</div>
+        <RefreshCw className="lgap-feature-mutual-arrow" />
+        <div className="lgap-feature-party lgap-feature-party-field">現場</div>
+        <span className="lgap-feature-visual-caption">双方が変わる</span>
+      </> : null}
+      {type === "voice" ? <>
+        <MessageCircle className="lgap-feature-voice-main" />
+        <span className="lgap-feature-voice-dot lgap-feature-voice-dot-a">本音</span>
+        <span className="lgap-feature-voice-dot lgap-feature-voice-dot-b">声</span>
+        <span className="lgap-feature-visual-caption">第三者が受け取る</span>
+      </> : null}
+      {type === "network" ? <>
+        <Network className="lgap-feature-network-main" />
+        <span className="lgap-feature-network-label lgap-feature-network-top">経営</span>
+        <span className="lgap-feature-network-label lgap-feature-network-left">部門A</span>
+        <span className="lgap-feature-network-label lgap-feature-network-right">部門B</span>
+        <span className="lgap-feature-visual-caption">上下・左右を同じ物差しで</span>
+      </> : null}
+    </div>
+  );
 }
 
 function IssueIllustration({ type, number }: { type: string; number: string }) {
