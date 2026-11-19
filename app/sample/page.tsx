@@ -17,9 +17,9 @@ export const metadata: Metadata = createPageMetadata({
 const demoAssessmentUrl = "https://gap.ceo-sherpa.com/sample/assessment";
 
 const issues = [
-  { icon: ArrowLeftRight, title: ["「伝えたこと」と", "「伝わったこと」が違う"], body: "指示と成果物がずれることで、やり直しや巻き直し、ダブルチェックなどの往復が続く。" },
-  { icon: UserRoundCog, title: ["「自分がやった方が早い」", "となる管理職"], body: "「自分がやったほうが早い」と、リーダー層が仕事を抱え込み、メンバー以上に疲弊する。" },
-  { icon: RotateCcw, title: ["「決まったはずのこと」が", "定着しない"], body: "目的や背景も伝えて設定や導入をしたはずなのに、いつのまにか元に戻ってしまう。" }
+  { visual: "communication", title: ["「伝えたこと」と", "「伝わったこと」が違う"], body: "指示と成果物がずれることで、やり直しや巻き直し、ダブルチェックなどの往復が続く。" },
+  { visual: "overload", title: ["「自分がやった方が早い」", "となる管理職"], body: "「自分がやったほうが早い」と、リーダー層が仕事を抱え込み、メンバー以上に疲弊する。" },
+  { visual: "reset", title: ["「決まったはずのこと」が", "定着しない"], body: "目的や背景も伝えて設定や導入をしたはずなのに、いつのまにか元に戻ってしまう。" }
 ];
 
 const programRows = [
@@ -71,8 +71,7 @@ export default function SampleLandingPage() {
           <SectionHead eyebrow="Issue" title="GAPはどこの組織でも必ず起こっている" />
           <div className="lgap-issue-grid">
             {issues.map((issue, index) => {
-              const Icon = issue.icon;
-              return <article className="lgap-issue-card" key={issue.title.join("")}><div className="lgap-issue-card-head"><div className="lgap-issue-icon"><Icon aria-hidden="true" /></div><div className="lgap-issue-num">{String(index + 1).padStart(2, "0")}</div></div><h3>{issue.title[0]}<br />{issue.title[1]}</h3><p>{issue.body}</p></article>;
+              return <article className="lgap-issue-card" key={issue.title.join("")}><IssueIllustration type={issue.visual} number={String(index + 1).padStart(2, "0")} /><h3>{issue.title[0]}<br />{issue.title[1]}</h3><p>{issue.body}</p></article>;
             })}
           </div>
           <div className="lgap-issue-note">これらは「特定の誰かのせい」ではなく、組織が大きくなるときに、<br className="lgap-pc-break" />必ず発生してくる<b>「認識の差＝GAP」</b>を放置してしまうことが原因です。</div>
@@ -249,4 +248,30 @@ function SectionHead({ eyebrow, title, lead }: { eyebrow: string; title: React.R
 
 function FeatureCard({ icon, number, title, children }: { icon: React.ReactNode; number: string; title: string; children: React.ReactNode }) {
   return <article className="lgap-feature-card"><div className="lgap-feature-icon">{icon}<span>{number}</span></div><h3>{title}</h3><p>{children}</p></article>;
+}
+
+function IssueIllustration({ type, number }: { type: string; number: string }) {
+  return (
+    <div className={`lgap-issue-visual lgap-issue-visual-${type}`} aria-hidden="true">
+      <span className="lgap-issue-visual-number">{number}</span>
+      {type === "communication" ? <>
+        <div className="lgap-issue-bubble"><MessageCircle /><small>伝えた</small></div>
+        <div className="lgap-issue-gap-mark"><ArrowLeftRight /><b>GAP</b></div>
+        <div className="lgap-issue-bubble lgap-issue-bubble-alt"><MessageCircle /><small>伝わった</small></div>
+      </> : null}
+      {type === "overload" ? <>
+        <span className="lgap-work-chip lgap-work-chip-a">確認</span>
+        <span className="lgap-work-chip lgap-work-chip-b">判断</span>
+        <div className="lgap-manager-icon"><UserRoundCog /></div>
+        <span className="lgap-work-chip lgap-work-chip-c">実務</span>
+        <span className="lgap-overload-label">抱え込み</span>
+      </> : null}
+      {type === "reset" ? <>
+        <div className="lgap-decision-chip">決定</div>
+        <div className="lgap-reset-arrow"><RotateCcw /></div>
+        <div className="lgap-old-way-chip">元の運用</div>
+        <span className="lgap-reset-label">いつのまにか戻る</span>
+      </> : null}
+    </div>
+  );
 }
