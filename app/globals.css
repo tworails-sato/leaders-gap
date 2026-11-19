@@ -1257,6 +1257,45 @@ th {
   padding: 96px 0;
 }
 
+.lgap-reveal {
+  min-width: 0;
+}
+
+.lgap-feature-heading {
+  display: block;
+  font-size: 0.84em;
+  white-space: nowrap;
+}
+
+.lgap-reveal.is-ready {
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+.lgap-reveal.is-ready.is-visible {
+  animation: lgap-reveal-up 650ms cubic-bezier(0.22, 1, 0.36, 1) var(--lgap-reveal-delay, 0ms) both;
+}
+
+.lgap-reveal-grow.is-ready {
+  transform: translateY(28px) scale(0.96);
+  transform-origin: center bottom;
+}
+
+.lgap-reveal-grow.is-ready.is-visible {
+  animation-name: lgap-reveal-grow;
+}
+
+@keyframes lgap-reveal-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes lgap-reveal-grow {
+  0% { opacity: 0; transform: translateY(28px) scale(0.96); }
+  68% { opacity: 1; transform: translateY(-2px) scale(1.01); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
 .lgap-gray {
   background: var(--lgap-bg-gray);
 }
@@ -1540,6 +1579,11 @@ th {
   grid-template-columns: repeat(3, 1fr);
   margin: 0 auto;
   max-width: 960px;
+}
+
+.lgap-issue-grid > .lgap-reveal > .lgap-issue-card,
+.lgap-feature-grid > .lgap-reveal > .lgap-feature-card {
+  height: 100%;
 }
 
 .lgap-issue-card {
@@ -2587,8 +2631,18 @@ th {
 
 @media (prefers-reduced-motion: reduce) {
   .lgap-hero::after,
-  .lgap-hero::before {
+  .lgap-hero::before,
+  .lgap-reveal.is-ready,
+  .lgap-reveal.is-ready.is-visible {
     animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .lgap-profit-reveal .lgap-profit-bar > div,
+  .lgap-profit-reveal.is-ready:not(.is-visible) .lgap-profit-bar > div {
+    clip-path: none;
+    transition: none;
   }
 }
 
@@ -4164,6 +4218,11 @@ th {
 }
 
 @media (max-width: 560px) {
+  .lgap-feature-heading {
+    font-size: 1em;
+    white-space: normal;
+  }
+
   .lgap-hero-heading-line {
     white-space: normal;
   }
@@ -4267,6 +4326,20 @@ th {
   height: 64px;
   overflow: hidden;
 }
+
+.lgap-profit-reveal .lgap-profit-bar > div {
+  clip-path: inset(0 0 0 0);
+  transition: clip-path 880ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.lgap-profit-reveal.is-ready:not(.is-visible) .lgap-profit-bar > div {
+  clip-path: inset(0 100% 0 0);
+}
+
+.lgap-profit-reveal .lgap-profit-sales > div:first-child { transition-delay: 40ms; }
+.lgap-profit-reveal .lgap-profit-sales > div:last-child { transition-delay: 190ms; }
+.lgap-profit-reveal .lgap-profit-destination > div:first-child { transition-delay: 340ms; }
+.lgap-profit-reveal .lgap-profit-destination > div:last-child { transition-delay: 490ms; }
 
 .lgap-profit-sales {
   grid-template-columns: 3fr 2fr;

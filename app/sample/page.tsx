@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import type React from "react";
 import { ContactForm } from "@/components/ContactForm";
 import { FloatingSimulationButton } from "@/components/FloatingSimulationButton";
+import { ScrollReveal } from "@/components/ScrollReveal";
 import { ValueSimulation } from "@/components/ValueSimulation";
 import { sampleReportThemes, sampleTopGaps } from "@/lib/sample-report";
 import { createPageMetadata } from "@/lib/site-metadata";
@@ -70,7 +71,7 @@ export default function SampleLandingPage() {
           <SectionHead eyebrow="Issue" title="GAPはどこの組織でも必ず起こっている" />
           <div className="lgap-issue-grid">
             {issues.map((issue, index) => {
-              return <article className="lgap-issue-card" key={issue.title.join("")}><IssueIllustration type={issue.visual} number={String(index + 1).padStart(2, "0")} /><h3>{issue.title[0]}<br />{issue.title[1]}</h3><p>{issue.body}</p></article>;
+              return <ScrollReveal variant="grow" delay={index * 110} key={issue.title.join("")}><article className="lgap-issue-card"><IssueIllustration type={issue.visual} number={String(index + 1).padStart(2, "0")} /><h3>{issue.title[0]}<br />{issue.title[1]}</h3><p>{issue.body}</p></article></ScrollReveal>;
             })}
           </div>
           <div className="lgap-issue-note">これらは「特定の誰かのせい」ではなく、組織が大きくなるときに、<br className="lgap-pc-break" />必ず発生してくる<b>「認識の差＝GAP」</b>を放置してしまうことが原因です。</div>
@@ -80,18 +81,18 @@ export default function SampleLandingPage() {
       <section className="lgap-sec lgap-gray lgap-section-anchor" id="simulation">
         <div className="lgap-wrap">
           <SectionHead eyebrow="Simulation" title="GAPが減ると、どれだけ付加価値を生み出せるか" lead="手戻り、認識違いによる確認の往復、離職や欠員。こうしたGAPに取られている時間が減れば、同じ人数のままで生み出せる粗利が増えます。貴社の数字で試算してみてください。" />
-          <GapProfitIntro />
+          <ScrollReveal className="lgap-profit-reveal"><GapProfitIntro /></ScrollReveal>
           <ValueSimulation />
         </div>
       </section>
 
       <section className="lgap-sec lgap-section-anchor" id="feature">
         <div className="lgap-wrap">
-          <SectionHead eyebrow="Feature" title="リーダーズGAPは「組織全体の判断基準をつくる」プログラムです。" />
+          <SectionHead eyebrow="Feature" title={<span className="lgap-feature-heading">リーダーズGAPは「組織全体の判断基準をつくる」<br />プログラムです。</span>} />
           <div className="lgap-feature-grid">
-            <FeatureCard visual="mutual" number="01" title="相互変革">研修や1on1は、受けた人しか変わりません。リーダーズGAPは経営者の任せ方・決め方も見直すので、組織が元に戻りにくくなります</FeatureCard>
-            <FeatureCard visual="voice" number="02" title="社外の第三者だから、本音が集まる">社内の人が聞いても出てこない声を、利害のない立場で集め、経営に届けます</FeatureCard>
-            <FeatureCard visual="network" number="03" title="階層と部門をまたいで見る">経営と現場の上下だけでなく、部門どうしの左右のGAPも、同じ物差しで測ります</FeatureCard>
+            <ScrollReveal variant="grow" delay={0}><FeatureCard visual="mutual" number="01" title="相互変革">研修や1on1は、受けた人しか変わりません。リーダーズGAPは経営者の任せ方・決め方も見直すので、組織が元に戻りにくくなります</FeatureCard></ScrollReveal>
+            <ScrollReveal variant="grow" delay={110}><FeatureCard visual="voice" number="02" title="社外の第三者だから、本音が集まる">社内の人が聞いても出てこない声を、利害のない立場で集め、経営に届けます</FeatureCard></ScrollReveal>
+            <ScrollReveal variant="grow" delay={220}><FeatureCard visual="network" number="03" title="階層と部門をまたいで見る">経営と現場の上下だけでなく、部門どうしの左右のGAPも、同じ物差しで測ります</FeatureCard></ScrollReveal>
           </div>
           <div className="lgap-comparison-block">
             <h3>一般的な研修・コーチングとの違い</h3>
@@ -242,7 +243,7 @@ function GapProfitIntro() {
 }
 
 function SectionHead({ eyebrow, title, lead }: { eyebrow: string; title: React.ReactNode; lead?: string }) {
-  return <><div className="lgap-eyebrow">{eyebrow}</div><h2 className="lgap-sec-title">{title}</h2>{lead ? <p className="lgap-sec-lead">{lead}</p> : null}</>;
+  return <ScrollReveal><div className="lgap-eyebrow">{eyebrow}</div><h2 className="lgap-sec-title">{title}</h2>{lead ? <p className="lgap-sec-lead">{lead}</p> : null}</ScrollReveal>;
 }
 
 function FeatureCard({ visual, number, title, children }: { visual: string; number: string; title: string; children: React.ReactNode }) {
